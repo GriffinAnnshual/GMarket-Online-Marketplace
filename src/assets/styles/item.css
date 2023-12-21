@@ -1,0 +1,31 @@
+.course-box {
+	 margin: 20px;
+	 border-radius: 10px;
+}
+ .course-box:hover {
+	 cursor: pointer;
+}
+ .course-box img {
+	 border-radius: 10px;
+	 height: 170px;
+}
+ .course-box .course-content {
+	 padding: 10px;
+}
+ .product_btn button {
+	 border: none;
+	 padding: 5px 10px;
+	 margin-right: 5px;
+	 border-radius: 10px;
+	 cursor: pointer;
+}
+ .product_btn button:hover {
+	 background-color: #d8d8d8;
+}
+ .product_btn button:nth-child(1) {
+	 background-color: #f0ec06;
+}
+ .product_btn button:nth-child(1):hover {
+	 background-color: #d6d309;
+}
+ 

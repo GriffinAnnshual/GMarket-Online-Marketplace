@@ -1,0 +1,49 @@
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.ChatContainer {
+  width: 400px;
+  background-color: white;
+}
+
+.Chat {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.MessageList {
+  padding: 10px;
+  height: 400px;
+  overflow-y: scroll;
+  
+}
+
+.Message {
+  padding: 5px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+}
+
+.user {
+  background-color: #d0e5f2;
+  align-self: flex-end;
+}
+
+.InputContainer {
+  display: flex;
+  padding: 10px;
+}
+
+input {
+  flex: 1;
+  padding: 5px;
+}
+
+button {
+  margin-left: 10px;
+}
