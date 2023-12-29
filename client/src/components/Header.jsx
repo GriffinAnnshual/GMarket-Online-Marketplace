@@ -1,10 +1,12 @@
+/* eslint-disable react/prop-types */
 import { Link } from "react-router-dom"
 import searchIcon from "./../assets/images/search-icon.png"
 import cartIcon from "../assets/images/shopping-cart.png"
 import '../assets/styles/home.css'
 
-function Header() {
-const isAuthenticated = true;
+function Header(props) {
+	const {log} = props;
+	console.log(log)
 	return (
 		<>
 			<div className=" border-b-2 p-[5px] flex justify-center h-[10%] bg-slate-300 ">
@@ -42,13 +44,24 @@ const isAuthenticated = true;
 					</div>
 				</div>
 				<div className="flex gap-4 items-center w-[100%] text-2xl ">
+					<div>
+						{log ? (
+							<Link >
+								<h2>Logout</h2>
+							</Link>
+						) : (
+							<Link to="/login">
+								<h2>Login</h2>
+							</Link>
+						)}
+					</div>
 					<Link to="/bid">
 						<div className="nav-box nav-right-box nav-box9 border-2 border-blue-600 p-2">
 							<h3>AuctionPlace</h3>
 						</div>
 					</Link>
 					<div className="nav-box nav-right-box nav-box7 ">
-						{isAuthenticated ? (
+						{log ? (
 							<Link to="/dashboard">Dashboard</Link>
 						) : (
 							<div className="border-2 border-blue-600 p-2">

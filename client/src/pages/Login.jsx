@@ -13,9 +13,11 @@ const Login = () => {
 		e.preventDefault()
 	}	
 
-	const handleGoogle = async() =>{
-		return await null;
+
+	const handleGoogle = () => {
+		window.open("http://localhost:3000/auth/google", "_self");
 	}
+
 	const handleTwitter = async() =>{
 		return await null;
 	}

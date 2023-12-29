@@ -9,8 +9,11 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
+  "proxy": "http://localhost:3000",
   "dependencies": {
+    "@auth0/auth0-react": "^2.2.4",
     "auth0-js": "^9.24.0",
+    "axios": "^1.6.3",
     "passport-google-oauth20": "^2.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
