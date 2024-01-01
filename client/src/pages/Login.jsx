@@ -4,7 +4,6 @@ import { Link} from "react-router-dom"
 import { FcGoogle } from "react-icons/fc";
 import { BsTwitterX } from "react-icons/bs"
 
-
 const Login = () => {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
@@ -13,14 +12,15 @@ const Login = () => {
 		e.preventDefault()
 	}	
 
-
 	const handleGoogle = () => {
 		window.open("http://localhost:3000/auth/google", "_self");
+
 	}
 
 	const handleTwitter = async() =>{
 		return await null;
 	}
+
 	return (
 		<div className="font-sans h-[98vh] flex justify-center items-center bg-blue-600">
 			<div className="bg-white flex-col border h-[80%] md:w-[30%] w-[90%] p-5 border-solid border-[rgb(231,231,231)] flex justify-center items-center">

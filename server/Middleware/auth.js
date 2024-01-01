@@ -1,7 +1,7 @@
 import GoogleStrategy from "passport-google-oauth2"
 import passport from "passport"
 import dotenv from 'dotenv'
-import userSchema from "../Modals/userSchema.js"
+import {userSchema} from "../Modals/userSchema.js"
 import mongoose from "mongoose"
 dotenv.config()
 
@@ -28,12 +28,16 @@ passport.use(
 		function (request, accessToken, refreshToken, profile, cb) {
 			User.updateOne(
 				{ google_UserID: profile.id },
-				{ google_UserID: profile.id },
+				{ google_UserID: profile.id,
+					email: profile.email,
+					name: profile.displayName,
+					profilePic: profile.picture
+				},
 				{ upsert: true }
 			)
 				.then(() => {
 					console.log("profile inserted or found")
-					return cb(null, profile, accessToken)
+					return cb(null, profile)
 				})
 				.catch((err) => {
 					console.log(err)

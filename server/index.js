@@ -6,42 +6,44 @@ import cors from 'cors'
 import passport from './Middleware/auth.js'
 import cookieParser from 'cookie-parser';
 import isAuthenticated from './Middleware/userAuth.js';
+import mongoose from 'mongoose'
+import MongoDBStore  from 'connect-mongodb-session';
+import dotenv from 'dotenv'
+dotenv.config()
 
 
-const secretKey = crypto.randomBytes(32).toString("hex")
-const app = express();
 const allowedOrigins = [
 	"http://localhost:3000",
 	"http://localhost:5173",
 	"https://accounts.google.com",
 ]
-app.use(cookieParser())
-app.use(
-	cors({
-		origin: function (origin, callback) {
-			if (!origin) return callback(null, true)
-			if (allowedOrigins.indexOf(origin) === -1) {
-				var msg =
-					"The CORS policy for this site does not allow access from the specified Origin."
-				return callback(new Error(msg), false)
-			}
-			return callback(null, true)
-		},
-	})
-)
+const secretKey = crypto.randomBytes(32).toString("hex")
 
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*")
-	res.header(
-		"Access-Control-Allow-Headers",
-		"Origin, X-Requested-With, Content-Type, Accept"
-	)
-	next()
-})
+// Create a express app.
+const app = express();
+// Cookie parser help to access the cookie values of the browser inside a server.
+app.use(cookieParser())
+// Body parser help to access the body values of the browser inside a server.
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(session({ secret:secretKey,resave: true, saveUninitialized: true })); 
+const uri = process.env.MONGO_URI
 
+const db = mongoose.connect(uri)
+
+const MongoDBSession = MongoDBStore(session)
+
+const store = new MongoDBSession({
+	uri: uri,
+	collection: "MySessions",
+})
+app.use(
+	session({
+		secret: secretKey,
+		resave: false,
+		saveUninitialized: false,
+        store: store,
+	})
+)
 
 app.get(
 	"/auth/google",
@@ -50,29 +52,22 @@ app.get(
 )
 
 
-    app.get("/oauth2/redirect/google", function (req, res, next) {
-        passport.authenticate("google", function (err, user, info) {
-            if (err) {
-                return next(err)
-            }
-            if (!user) {
-                return res.redirect("/login")
-            }
-            console.log(info)
-            res.cookie("access_token", info, {
-                    httpOnly: true,
-                    secure: process.env.NODE_ENV === "production",
-                    expires: new Date(Date.now() + 60 * 60 * 1000),
-                    sameSite: "strict",
-            })
-            return res.redirect("http://localhost:5173/")
+app.get("/oauth2/redirect/google", function (req, res, next) {
+    passport.authenticate("google", function (err, user) {
+        if (err) {
+            return next(err);
+        }
+        if (!user) {
+            return res.redirect("/login")
+        }
+        return res.redirect("http://localhost:5173/")
+    })(req, res, next)  
+})
 
-        })(req, res, next)
-    })
-
-
-
-app.get('/home',isAuthenticated,function(req, res){
+app.get('/home',function(req, res){
+    req.session.isAuth = true;
+    console.log(req.session);
+    console.log(req.session.cookie);
     res.status(200).json({success:true, message:"You are authenticated"})
 })
 
