@@ -18,13 +18,15 @@ const Home = () => {
 	useEffect(() => {
 		const isAuth = async () => {
 			try {
-				const res = await axios.get("http://localhost:3000/home", {
+				const res = await axios.get("http://localhost:3000/getUser", {
+					withCredentials: true,
 					headers: {
 						"Content-Type": "application/json",
 					},
-				});
-				console.log(res);
-				setLoggedIn(true);
+				})
+					console.log(res);
+					setLoggedIn(true)
+					sessionStorage.setItem("user", res.data)
 			} catch (error) {
 				console.log("Authentication failed.");
 				setLoggedIn(false);

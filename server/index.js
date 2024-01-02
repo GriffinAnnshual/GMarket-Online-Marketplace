@@ -2,13 +2,14 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import session from 'express-session'; 
 import crypto from 'crypto';
-import cors from 'cors'
+import bcrypt from 'bcryptjs';  
 import passport from './Middleware/auth.js'
 import cookieParser from 'cookie-parser';
-import isAuthenticated from './Middleware/userAuth.js';
 import mongoose from 'mongoose'
 import MongoDBStore  from 'connect-mongodb-session';
 import dotenv from 'dotenv'
+import isAuthenticated from './Middleware/userAuth.js';
+import cors from 'cors'
 dotenv.config()
 
 
@@ -45,6 +46,22 @@ app.use(
 	})
 )
 
+app.use(cors(
+    {
+        origin: function (origin, callback) {
+            if (!origin) return callback(null, true)
+            if (allowedOrigins.indexOf(origin) === -1) {
+                var msg =
+                    "The CORS policy for this site does not " +
+                    "allow access from the specified Origin."
+                return callback(new Error(msg), false)
+            }
+            return callback(null, true)
+        },
+        credentials: true,
+    }
+))
+
 app.get(
 	"/auth/google",
 	passport.authenticate("google", { scope: ["email", "profile"] })
@@ -53,24 +70,56 @@ app.get(
 
 
 app.get("/oauth2/redirect/google", function (req, res, next) {
-    passport.authenticate("google", function (err, user) {
-        if (err) {
-            return next(err);
-        }
-        if (!user) {
-            return res.redirect("/login")
-        }
-        return res.redirect("http://localhost:5173/")
-    })(req, res, next)  
+	passport.authenticate("google", function (err, user, accessToken) {
+		if (err) {
+			return next(err)
+		}
+		if (!user) {
+			return res.redirect("/login")
+		}
+
+		req.logIn(user, (loginErr) => {
+			if (loginErr) {
+				return next(loginErr)
+			}
+            req.session.accessToken = accessToken
+            res.redirect("http://localhost:5173/")
+		})
+	})(req, res, next)
 })
 
-app.get('/home',function(req, res){
-    req.session.isAuth = true;
-    console.log(req.session);
-    console.log(req.session.cookie);
-    res.status(200).json({success:true, message:"You are authenticated"})
+
+app.get('/register',async (req,res)=>{
+    const {username,password,email} = req.body;
+
+    const user = await User.findOne({email: email});
+
+    if(user){
+        res.send(401).json({exists: true, message: 'User already exists'});
+    }
+    const hashPassword = bcrypt.hash(password, 10);
+
+    const User = new User({
+        name: username,
+        password: hashPassword,
+        email: email
+    })
+
+    await User.save()
+
+    jwt.sign(User, "secretKey", {expiresIn: '24h'}, (err, token)=>{
+        res.cookie('access_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.status(200).json({success: true, token: token})
+    })
+
+
+    return res.redirect("/home")
 })
 
+app.get('/getUser',isAuthenticated,function(req, res){
+    console.log(req.user)
+   res.status(200).json(req.user)
+})
   
 app.post("/logout", function (req, res, next) {
     res.clearCookie('access_token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });

@@ -27,12 +27,18 @@ const userSchema = new Schema({
         type: String,
         required: false,
     },
-    password: String
+    password: {
+        type:String,
+        required: false,
+    }
 })
 
 // export default userSchema; to export only one model
 
 // To import multiple models
-module.exports = mongoose.model("User",userSchema);
+
+const User = mongoose.model('User',userSchema);
+
+export default User;
 
 

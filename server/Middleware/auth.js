@@ -1,7 +1,7 @@
 import GoogleStrategy from "passport-google-oauth2"
 import passport from "passport"
 import dotenv from 'dotenv'
-import {userSchema} from "../Modals/userSchema.js"
+import User from "../Modals/userSchema.js"
 import mongoose from "mongoose"
 dotenv.config()
 
@@ -15,7 +15,6 @@ db.on("connected", () => {
 	console.log("Mongoose is connected")
 })
 
-const User = new mongoose.model("User", userSchema)
 
 passport.use(
 	new GoogleStrategy.Strategy(
@@ -37,7 +36,7 @@ passport.use(
 			)
 				.then(() => {
 					console.log("profile inserted or found")
-					return cb(null, profile)
+					return cb(null, profile,accessToken)
 				})
 				.catch((err) => {
 					console.log(err)

@@ -11,10 +11,18 @@ const Login = () => {
 
 	const handleSignup = async (e) => {
 		e.preventDefault()
+		const res = await fetch('signup', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({ email, password,Name }),
+		});
+		console.log(res);
 	}
 
 	const handleGoogle = async () => {
-		return await null
+		window.open("http://localhost:3000/auth/google", "_self")
 	}
 	const handleTwitter = async () => {
 		return await null
