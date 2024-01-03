@@ -14,7 +14,7 @@ import axios from 'axios';
 
 const Home = () => {
 	const [loggedIn, setLoggedIn] = useState(false);
-
+	const [user, setUser] = useState(null)
 	useEffect(() => {
 		const isAuth = async () => {
 			try {
@@ -26,6 +26,7 @@ const Home = () => {
 				})
 					console.log(res);
 					setLoggedIn(true)
+					setUser(res.data)
 					sessionStorage.setItem("user", res.data)
 			} catch (error) {
 				console.log("Authentication failed.");
@@ -33,20 +34,20 @@ const Home = () => {
 			}
 		};
 		isAuth();
-	}, []);
+	}, [loggedIn]);
 
 	console.log("loggedIn");
 
 	return (
 		<main>
-			<Header log={loggedIn ? true : false} />
+			<Header log={loggedIn ? true : false} user={user} />
 			<div className="flex flex-col">
 				<Carousel
 					stopOnHover={false}
 					autoPlay={true}
 					interval={3000}
 					infiniteLoop={true}
-					className="carousel h-[20%] w-[100%] flex flex-col items-center"
+					className="-z-50 carousel h-[20%] w-[100%] flex flex-col items-center"
 				>
 					<div>
 						<img src={slider3} alt="Slider 3" />

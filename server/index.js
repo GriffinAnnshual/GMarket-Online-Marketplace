@@ -42,6 +42,9 @@ app.use(
 		secret: secretKey,
 		resave: false,
 		saveUninitialized: false,
+        cookie:{
+            maxAge: 3600000,
+        },
         store: store,
 	})
 )
@@ -121,11 +124,12 @@ app.get('/getUser',isAuthenticated,function(req, res){
    res.status(200).json(req.user)
 })
   
-app.post("/logout", function (req, res, next) {
-    res.clearCookie('access_token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-    res.clearCookie('refresh_token', { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-    res.status(200).json({ message: 'Logout successful' });
-    res.redirect("http://localhost:5173/")
+app.post("/logout",(req, res)=>{
+    console.log(req.session.id)
+   store.destroy(req.session.id)
+   req.session.destroy()
+   req.session = null;
+   return res.redirect("http://localhost:5173/")
 })
 
 app.listen(3000, () => {
