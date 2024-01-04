@@ -4,6 +4,7 @@ import searchIcon from "./../assets/images/search-icon.png"
 import cartIcon from "../assets/images/shopping-cart.png"
 import '../assets/styles/home.css'
 import axios from 'axios'
+import { FaRegUserCircle } from "react-icons/fa";
 
 function Header(props) {
 
@@ -86,14 +87,18 @@ function Header(props) {
 								<div className="primary-navigation">
 									<ul>
 										<li className="bg-slate-300 rounded-md">
-											<div className=" font-serif  items-center pl-5 gap-2 flex nowhitespace ">
+											<div className=" font-serif  items-center pl-2 gap-2 flex nowhitespace ">
 												<span>
-													<img
-														className="w-[60px]"
-														src={user.picture}
-														alt="profile_picture"></img>
+													{user.picture ? (
+														<img
+															className="w-[60px]"
+															src={user.picture}
+															alt="profile_picture"></img>
+													) : (
+														<FaRegUserCircle className="pr-4" size={60} />
+													)}
 												</span>{" "}
-												<span>{user.given_name}</span>
+												<span>{user.given_name || user.name}</span>
 											</div>
 
 											<ul className="dropdown">

@@ -1,4 +1,5 @@
 import axios from "axios"
+import jwt from 'jsonwebtoken'
 
 const isAuthenticated = async (req, res, next) => {
 	if (req.session.accessToken) {
@@ -25,9 +26,25 @@ const isAuthenticated = async (req, res, next) => {
 			console.error("Error in API request:", error)
 			res.status(500).json({ exists: false, message: "Internal Server Error" })
 		}
-	} else {
+	}
+	else if(req.session.access_token) {
+		const token = req.session.access_token;
+		jwt.verify(token, "secretKey", function(err){
+			if(err){
+				console.log("Error in API request:", err)
+			}
+			else{
+				console.log("session token verified found!")
+				req.user = jwt.decode(token)
+				console.log(req.user)
+				next()
+			}
+		})
+	}
+	else {
 		res.status(401).json({ exists: false, message: "Unauthorized" })
 	}
 }
+
 
 export default isAuthenticated

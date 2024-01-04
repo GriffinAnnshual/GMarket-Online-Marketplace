@@ -27,7 +27,6 @@ const Home = () => {
 					console.log(res);
 					setLoggedIn(true)
 					setUser(res.data)
-					sessionStorage.setItem("user", res.data)
 			} catch (error) {
 				console.log("Authentication failed.");
 				setLoggedIn(false);

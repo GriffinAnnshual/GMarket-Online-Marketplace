@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Link} from "react-router-dom"
 import { FcGoogle } from "react-icons/fc";
 import { BsTwitterX } from "react-icons/bs"
+import axios from 'axios'
 
 const Login = () => {
 	const [email, setEmail] = useState("")
@@ -10,6 +11,20 @@ const Login = () => {
 
 	const handleLogin = async (e) => {
 		e.preventDefault()
+
+		await axios.post("http://localhost:3000/login",{email: email, password: password},{
+			withCredentials: true,
+			headers: {
+				"Content-Type": "application/json",
+			}
+		}).then((res)=>{
+			console.log("User logged in successfully")
+			console.log(res)
+			window.location.href = "/"
+		})
+		.catch((err)=>{
+			console.log("Error in loggin in" + err.message);
+		})
 	}	
 
 	const handleGoogle = () => {

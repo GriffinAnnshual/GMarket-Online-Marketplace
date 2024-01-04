@@ -7,9 +7,11 @@ import passport from './Middleware/auth.js'
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose'
 import MongoDBStore  from 'connect-mongodb-session';
+import User from './Modals/userSchema.js'
 import dotenv from 'dotenv'
 import isAuthenticated from './Middleware/userAuth.js';
 import cors from 'cors'
+import jwt from 'jsonwebtoken'
 dotenv.config()
 
 
@@ -26,7 +28,7 @@ const app = express();
 app.use(cookieParser())
 // Body parser help to access the body values of the browser inside a server.
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(bodyParser.json());
 const uri = process.env.MONGO_URI
 
 const db = mongoose.connect(uri)
@@ -91,38 +93,76 @@ app.get("/oauth2/redirect/google", function (req, res, next) {
 	})(req, res, next)
 })
 
+app.post("/login", async(req,res)=>{
+    const {email, password} = req.body;
+    console.log(req.body);
 
-app.get('/register',async (req,res)=>{
-    const {username,password,email} = req.body;
-
-    const user = await User.findOne({email: email});
-
-    if(user){
-        res.send(401).json({exists: true, message: 'User already exists'});
+    const user = await User.findOne({ email: email});
+    if (!user){
+        console.log("User not found");
+        res.sendStatus(401).json({ exists: false, message: 'User not found' });
     }
-    const hashPassword = bcrypt.hash(password, 10);
+    const isMatch = bcrypt.compare(password, user.password);
 
-    const User = new User({
+    if (!isMatch) {
+        console.log("Incorrect password");
+        res.sendStatus(401).json({ exists: false, message: 'Incorrect password' });
+    }
+    else{
+        jwt.sign(
+			{ email: email, name: user.name },
+			"secretKey",
+			{ expiresIn: "24h" },
+			(err, token) => {
+				if (err) {
+					console.log("jwt signin failed")
+				}
+				console.log(token)
+				req.session.access_token = token
+				res.status(200).json({ success: true, token: token })
+			}
+		)
+    }
+})
+
+
+
+app.post('/register', async (req, res) => {
+
+    const { email, password, username } = req.body;
+    const user = await User.findOne({ email: email });
+
+    if (user) {
+        console.log("User already exists");
+        res.sendStatus(401).json({ exists: true, message: 'User already exists' });
+    }
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const newUser = new User({
+        email: email,
         name: username,
         password: hashPassword,
-        email: email
     })
-
-    await User.save()
-
-    jwt.sign(User, "secretKey", {expiresIn: '24h'}, (err, token)=>{
-        res.cookie('access_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
-        res.status(200).json({success: true, token: token})
-    })
-
-
-    return res.redirect("/home")
-})
+    await newUser.save();
+    jwt.sign(
+        { email: email, name: username, password: hashPassword },
+        "secretKey",
+        { expiresIn: "24h" },
+        (err, token) => {
+            if (err) { console.log("jwt signin failed") }
+            console.log(token);
+            req.session.access_token = token;
+            res.status(200).json({ success: true, token: token });
+        }
+    );
+});
 
 app.get('/getUser',isAuthenticated,function(req, res){
-    console.log(req.user)
+    console.log("access token")
+    console.log(req.session.access_token)
    res.status(200).json(req.user)
 })
+
   
 app.post("/logout",(req, res)=>{
     console.log(req.session.id)

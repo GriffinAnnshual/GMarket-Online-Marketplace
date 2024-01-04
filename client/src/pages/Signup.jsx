@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom"
 import { FcGoogle } from "react-icons/fc"
 import { BsTwitterX } from "react-icons/bs"
-
+import axios from 'axios'
 const Login = () => {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
@@ -11,14 +11,20 @@ const Login = () => {
 
 	const handleSignup = async (e) => {
 		e.preventDefault()
-		const res = await fetch('signup', {
-			method: 'POST',
+		await axios.post('http://localhost:3000/register',{email: email,password: password,username: Name},{
+			withCredentials: true,
 			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ email, password,Name }),
-		});
-		console.log(res);
+				"Content-Type": "application/json",
+			}
+		})
+		.then((res)=>{
+			console.log(res);
+			window.location.href = "/";
+		})
+		.catch((err)=>{
+			console.log("User Already Exists" + err.message);
+		}
+		)
 	}
 
 	const handleGoogle = async () => {
