@@ -31,8 +31,9 @@ const Login = () => {
 		window.open("http://localhost:3000/auth/google", "_self")
 	}
 	const handleTwitter = async () => {
-		return await null
+		window.open("http://localhost:3000/auth/twitter", "_self")
 	}
+	
 	return (
 		<div className="font-sans h-[98vh] flex justify-center items-center bg-blue-600">
 			<div className="bg-white flex-col border h-[90%] md:w-[30%] w-[90%] p-5 border-solid border-[rgb(231,231,231)] flex justify-center items-center">

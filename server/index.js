@@ -12,13 +12,21 @@ import dotenv from 'dotenv'
 import isAuthenticated from './Middleware/userAuth.js';
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
+import LoginWithTwitter from "login-with-twitter"
+import axios from 'axios'
 dotenv.config()
 
+const tw = new LoginWithTwitter({
+	consumerKey: process.env.VITE_APP_TWITTER_CLIENT_ID,
+	consumerSecret: process.env.VITE_APP_TWITTER_CLIENT_SECRET,
+	callbackUrl: "http://localhost:3000/auth/twitter/callback",
+})
 
 const allowedOrigins = [
 	"http://localhost:3000",
 	"http://localhost:5173",
 	"https://accounts.google.com",
+	"https://api.twitter.com/",
 ]
 const secretKey = crypto.randomBytes(32).toString("hex")
 
@@ -92,6 +100,54 @@ app.get("/oauth2/redirect/google", function (req, res, next) {
 		})
 	})(req, res, next)
 })
+
+app.get("/auth/twitter",(req,res)=>{
+    tw.login((err,tokenSecret,url)=>{
+        if(err){
+            console.log("Error in obtaining request token"+ err.message);
+            res.status(401).send(err.message);
+        }
+
+        req.session.tokenSecret = tokenSecret;
+        console.log(url)
+        res.redirect(url)
+    })
+})
+
+const getUserProfile = async(userToken)=>{
+   try {
+			const res = await axios.get("https://api.twitter.com/2/tweets", {
+				headers: {
+					content_type: "application/json",
+					Authorization: `Bearer ${userToken}`,
+				},
+			})
+            const userProfile = res.data.data
+            console.log(userProfile)
+            return userProfile
+		} catch (error) {
+			console.error("Error fetching user profile:", error.message)
+		}
+}
+
+app.get("/auth/twitter/callback",(req,res)=>{
+
+    tw.callback({
+        oauth_token: req.query.oauth_token,
+        oauth_verifier: req.query.oauth_verifier }, req.session.tokenSecret , (err,user)=>{
+          
+            if (err){
+                console.log("Error in twitter user authentication"+ err.message);
+                res.status(err.status).send(err.message);
+            }
+
+            delete req.session.tokenSecret
+            req.session.user = user
+
+            res.status(200).json(getUserProfile(req.session.user))
+    })
+})
+
 
 app.post("/login", async(req,res)=>{
     const {email, password} = req.body;
