@@ -26,11 +26,11 @@ passport.use(
 		},
 		function (request, accessToken, refreshToken, profile, cb) {
 			User.updateOne(
-				{ google_UserID: profile.id },
+				{ email: profile.email},
 				{ google_UserID: profile.id,
 					email: profile.email,
 					name: profile.displayName,
-					profilePic: profile.picture
+					profilePic: profile.picture,
 				},
 				{ upsert: true }
 			)

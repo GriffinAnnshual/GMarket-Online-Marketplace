@@ -13,9 +13,20 @@ import isAuthenticated from './Middleware/userAuth.js';
 import cors from 'cors'
 import jwt from 'jsonwebtoken'
 import LoginWithTwitter from "login-with-twitter"
-import axios from 'axios'
+import OAuth from "oauth-1.0a"
+import got from 'got'
+
 dotenv.config()
 
+const oauth = OAuth({
+	consumer: {
+		key: process.env.VITE_APP_TWITTER_CLIENT_ID,
+		secret: process.env.VITE_APP_TWITTER_CLIENT_SECRET,
+	},
+	signature_method: "HMAC-SHA1",
+	hash_function: (baseString, key) =>
+		crypto.createHmac("sha1", key).update(baseString).digest("base64"),
+})
 const tw = new LoginWithTwitter({
 	consumerKey: process.env.VITE_APP_TWITTER_CLIENT_ID,
 	consumerSecret: process.env.VITE_APP_TWITTER_CLIENT_SECRET,
@@ -105,7 +116,7 @@ app.get("/auth/twitter",(req,res)=>{
     tw.login((err,tokenSecret,url)=>{
         if(err){
             console.log("Error in obtaining request token"+ err.message);
-            res.status(401).send(err.message);
+            return res.status(401).send(err.message);  // if response is sent at the middle then return should be used as. Else it throws error
         }
 
         req.session.tokenSecret = tokenSecret;
@@ -114,55 +125,82 @@ app.get("/auth/twitter",(req,res)=>{
     })
 })
 
-const getUserProfile = async(userToken)=>{
-   try {
-			const res = await axios.get("https://api.twitter.com/2/tweets", {
-				headers: {
-					content_type: "application/json",
-					Authorization: `Bearer ${userToken}`,
-				},
-			})
-            const userProfile = res.data.data
-            console.log(userProfile)
-            return userProfile
-		} catch (error) {
-			console.error("Error fetching user profile:", error.message)
-		}
-}
+// const getUserProfile = async (user) => {
+// 	const { userId, userToken, userTokenSecret } = user
 
-app.get("/auth/twitter/callback",(req,res)=>{
+// 	try {
+// 		const request_data = {
+// 			url: `https://api.twitter.com/2/users/${userId}`,
+// 			method: "GET",
+// 		}
 
+// 		const token = {
+// 			key: userToken,
+// 			secret: userTokenSecret,
+// 		}
+
+// 		const headers = oauth.toHeader(oauth.authorize(request_data, token))
+
+// 		const res = await got(request_data.url, {
+// 			method: request_data.method,
+// 			headers: {
+//                 Authorization: headers["Authorization"]
+//             }
+// 		})
+
+// 		const userProfile = JSON.parse(res.body)
+//         console.log(userProfile)
+// 		return userProfile
+// 	} catch (error) {
+// 		console.error("Error fetching user profile:", error)
+// 		return null
+// 	}
+// }
+
+app.get("/auth/twitter/callback", async(req,res)=>{
     tw.callback({
         oauth_token: req.query.oauth_token,
-        oauth_verifier: req.query.oauth_verifier }, req.session.tokenSecret , (err,user)=>{
+        oauth_verifier: req.query.oauth_verifier }, req.session.tokenSecret , async(err,user)=>{
           
             if (err){
                 console.log("Error in twitter user authentication"+ err.message);
-                res.status(err.status).send(err.message);
+                return res.status(err.status).send(err.message);
             }
 
             delete req.session.tokenSecret
             req.session.user = user
 
-            res.status(200).json(getUserProfile(req.session.user))
+            const mongoUser = await User.findOne({name: req.session.user.userName, loginType:"Twitter"})
+            if(!mongoUser){
+            const newUser = new User({
+                            name: user.userName,
+							Username: user.userName,
+							loginType: "Twitter",
+						})
+
+						await newUser.save()
+            }
+            res.redirect("http://localhost:5173/")
     })
 })
 
 
 app.post("/login", async(req,res)=>{
-    const {email, password} = req.body;
+   try{
+     const {email, password} = req.body;
     console.log(req.body);
 
-    const user = await User.findOne({ email: email});
+    const user = await User.findOne({ email: email, loginType: "Normal"});
+
     if (!user){
         console.log("User not found");
-        res.sendStatus(401).json({ exists: false, message: 'User not found' });
+        return res.status(401).json({ exists: false, message: 'User not found' });
     }
     const isMatch = bcrypt.compare(password, user.password);
 
     if (!isMatch) {
         console.log("Incorrect password");
-        res.sendStatus(401).json({ exists: false, message: 'Incorrect password' });
+        return res.status(401).json({ exists: false, message: 'Incorrect password' });
     }
     else{
         jwt.sign(
@@ -179,6 +217,9 @@ app.post("/login", async(req,res)=>{
 			}
 		)
     }
+   }catch(err){
+    return res.status(400).json({success: false, message: "Invalid credentials"})
+   }
 })
 
 
@@ -186,11 +227,11 @@ app.post("/login", async(req,res)=>{
 app.post('/register', async (req, res) => {
 
     const { email, password, username } = req.body;
-    const user = await User.findOne({ email: email });
+    const user = await User.findOne({ email: email , loginType: "Normal"});
 
     if (user) {
         console.log("User already exists");
-        res.sendStatus(401).json({ exists: true, message: 'User already exists' });
+        return res.status(401).json({ exists: true, message: 'User already exists' });
     }
     const hashPassword = await bcrypt.hash(password, 10);
 
@@ -198,6 +239,7 @@ app.post('/register', async (req, res) => {
         email: email,
         name: username,
         password: hashPassword,
+        loginType: "Normal",
     })
     await newUser.save();
     jwt.sign(

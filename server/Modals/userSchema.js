@@ -5,22 +5,21 @@ const userSchema = new Schema({
     google_UserID : {
         type: String,
         required: false,
+        unique: true
     },
     email : {
         type: String,
-        required: true,
+        required: false,
+        unique: true
+    },
+    Username:{
+        type: String,
+        required: false,
         unique: true
     },
     name : {
         type: String,
         required: true,
-        unique: false
-    },
-
-    phone : {
-        type: String,
-        required: false,
-        unique: true,
     },
 
     profilePic : {
@@ -30,7 +29,12 @@ const userSchema = new Schema({
     password: {
         type:String,
         required: false,
-    }
+    },
+    loginType:{
+        type:String,
+        required: true,
+    },
+    phone: String
 })
 
 // export default userSchema; to export only one model

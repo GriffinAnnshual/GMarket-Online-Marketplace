@@ -4,6 +4,9 @@ import { Link} from "react-router-dom"
 import { FcGoogle } from "react-icons/fc";
 import { BsTwitterX } from "react-icons/bs"
 import axios from 'axios'
+import {toast, ToastContainer} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
 
 const Login = () => {
 	const [email, setEmail] = useState("")
@@ -18,22 +21,32 @@ const Login = () => {
 				"Content-Type": "application/json",
 			}
 		}).then((res)=>{
+			toast.success("Login successful")
 			console.log("User logged in successfully")
 			console.log(res)
 			window.location.href = "/"
 		})
 		.catch((err)=>{
+			console.log()
+			if(err.response.data){
+				toast.error(err.response.data.message)
+			}
+			else{
+			toast.error("Invalid Credentials")
+			}
 			console.log("Error in loggin in" + err.message);
 		})
 	}	
 
 	const handleGoogle = () => {
+		toast.info("Redirecting to Google")
 		window.open("http://localhost:3000/auth/google", "_self");
 
 	}
 
 	const handleTwitter = async() =>{
-		return await null;
+		toast.info("Redirecting to Twitter")
+		window.open("http://localhost:3000/auth/twitter", "_parent")
 	}
 
 	return (
@@ -91,6 +104,18 @@ const Login = () => {
 					</div>
 				</div>
 			</div>
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light"
+			/>
 		</div>
 	)
 }

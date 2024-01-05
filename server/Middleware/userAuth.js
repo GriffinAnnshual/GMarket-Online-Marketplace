@@ -41,6 +41,12 @@ const isAuthenticated = async (req, res, next) => {
 			}
 		})
 	}
+	else if (req.session.user){
+		console.log("twitter user found!")
+		const {userName, userToken}= req.session.user
+		req.user = {name: userName, token: userToken}
+		next()
+	}
 	else {
 		res.status(401).json({ exists: false, message: "Unauthorized" })
 	}

@@ -4,6 +4,9 @@ import { Link } from "react-router-dom"
 import { FcGoogle } from "react-icons/fc"
 import { BsTwitterX } from "react-icons/bs"
 import axios from 'axios'
+import {toast, ToastContainer} from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+
 const Login = () => {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
@@ -19,9 +22,15 @@ const Login = () => {
 		})
 		.then((res)=>{
 			console.log(res);
+			toast.success("Account Created Successfully")
 			window.location.href = "/";
 		})
 		.catch((err)=>{
+			if(err.response.data.message){
+				toast.error(err.response.data.message)
+			}
+			else
+			toast.error("User Already Exists")
 			console.log("User Already Exists" + err.message);
 		}
 		)
@@ -31,7 +40,7 @@ const Login = () => {
 		window.open("http://localhost:3000/auth/google", "_self")
 	}
 	const handleTwitter = async () => {
-		window.open("http://localhost:3000/auth/twitter", "_self")
+		window.open("http://localhost:3000/auth/twitter", "_parent")
 	}
 	
 	return (
@@ -98,6 +107,7 @@ const Login = () => {
 					</div>
 				</div>
 			</div>
+			<ToastContainer />
 		</div>
 	)
 }

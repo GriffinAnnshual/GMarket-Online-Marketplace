@@ -91,7 +91,7 @@ function Header(props) {
 												<span>
 													{user.picture ? (
 														<img
-															className="w-[60px]"
+															className="w-[100%]"
 															src={user.picture}
 															alt="profile_picture"></img>
 													) : (
