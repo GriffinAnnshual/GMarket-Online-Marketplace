@@ -20,8 +20,7 @@ const Login = () => {
 				"Content-Type": "application/json",
 			}
 		})
-		.then((res)=>{
-			console.log(res);
+		.then(()=>{
 			toast.success("Account Created Successfully")
 			window.location.href = "/";
 		})
@@ -29,18 +28,17 @@ const Login = () => {
 			if(err.response.data.message){
 				toast.error(err.response.data.message)
 			}
-			else
-			toast.error("User Already Exists")
-			console.log("User Already Exists" + err.message);
 		}
 		)
 	}
 
 	const handleGoogle = async () => {
+		toast.info("Redirecting to Google")
 		window.open("http://localhost:3000/auth/google", "_self")
 	}
 	const handleTwitter = async () => {
-		window.open("http://localhost:3000/auth/twitter", "_parent")
+		toast.info("Redirecting to Twitter")
+		window.open("http://localhost:3000/auth/twitter", "_self")
 	}
 	
 	return (

@@ -5,7 +5,7 @@ import cartIcon from "../assets/images/shopping-cart.png"
 import '../assets/styles/home.css'
 import axios from 'axios'
 import { FaRegUserCircle } from "react-icons/fa";
-
+import {toast} from 'react-toastify'
 function Header(props) {
 
 	const { log, user } = props
@@ -21,11 +21,15 @@ function Header(props) {
 						"Content-Type": "application/json",
 					},
 				}
-			).then(console.log("Logged out"));
+			).then(()=>{
+				toast.info("Logged out!")
+				window.location.reload()
+			})
 		} catch (err) {
-			console.log(err);
+			if (err.response.data.message) {
+				toast.error(err.response.data.message)
+			}
 		}
-		window.location.reload();
 	};
 
 	return (
@@ -87,15 +91,25 @@ function Header(props) {
 								<div className="primary-navigation">
 									<ul>
 										<li className="bg-slate-300 rounded-md">
-											<div className=" font-serif  items-center pl-2 gap-2 flex nowhitespace ">
+											<div className=" font-serif whitespace-nowrap items-center pl-2 gap-2 flex">
 												<span>
 													{user.picture ? (
-														<img
-															className="w-[100%]"
-															src={user.picture}
-															alt="profile_picture"></img>
+														user.userName ? (
+															<img
+																className="w-[170px]"
+																src={user.picture}
+																alt="profile_picture"></img>
+														) : (
+															<img
+																className="w-[100px]"
+																src={user.picture}
+																alt="profile_picture"></img>
+														)
 													) : (
-														<FaRegUserCircle className="pr-4" size={60} />
+														<FaRegUserCircle
+															className="pr-4"
+															size={60}
+														/>
 													)}
 												</span>{" "}
 												<span>{user.given_name || user.name}</span>

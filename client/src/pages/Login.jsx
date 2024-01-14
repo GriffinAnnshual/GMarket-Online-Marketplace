@@ -20,21 +20,14 @@ const Login = () => {
 			headers: {
 				"Content-Type": "application/json",
 			}
-		}).then((res)=>{
+		}).then(()=>{
 			toast.success("Login successful")
-			console.log("User logged in successfully")
-			console.log(res)
 			window.location.href = "/"
 		})
 		.catch((err)=>{
-			console.log()
 			if(err.response.data){
 				toast.error(err.response.data.message)
 			}
-			else{
-			toast.error("Invalid Credentials")
-			}
-			console.log("Error in loggin in" + err.message);
 		})
 	}	
 

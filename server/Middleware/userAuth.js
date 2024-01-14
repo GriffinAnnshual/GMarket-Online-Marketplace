@@ -43,8 +43,8 @@ const isAuthenticated = async (req, res, next) => {
 	}
 	else if (req.session.user){
 		console.log("twitter user found!")
-		const {userName, userToken}= req.session.user
-		req.user = {name: userName, token: userToken}
+		const {userName, userToken, name, picture}= req.session.user
+		req.user = {userName: userName, name: name, token: userToken, picture: picture}
 		next()
 	}
 	else {

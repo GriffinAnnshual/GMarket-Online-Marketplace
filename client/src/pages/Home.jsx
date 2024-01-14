@@ -11,6 +11,8 @@ import slider2 from "../assets/images/slider2.png";
 import slider3 from "../assets/images/slider3.png";
 import './../assets/styles/product.css';
 import axios from 'axios';
+import {ToastContainer} from 'react-toastify'
+import "react-toastify/dist/ReactToastify.css"
 
 const Home = () => {
 	const [loggedIn, setLoggedIn] = useState(false);
@@ -24,7 +26,6 @@ const Home = () => {
 						"Content-Type": "application/json",
 					},
 				})
-					console.log(res);
 					setLoggedIn(true)
 					setUser(res.data)
 			} catch (error) {
@@ -35,7 +36,6 @@ const Home = () => {
 		isAuth();
 	}, [loggedIn]);
 
-	console.log("loggedIn");
 
 	return (
 		<main>
@@ -82,6 +82,7 @@ const Home = () => {
 					</div>
 				</div>
 			</div>
+			<ToastContainer/>
 		</main>
 	);
 };

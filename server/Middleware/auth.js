@@ -24,24 +24,26 @@ passport.use(
 			callbackURL: "/oauth2/redirect/google",
 			passReqToCallback: true,
 		},
-		function (request, accessToken, refreshToken, profile, cb) {
-			User.updateOne(
-				{ email: profile.email},
-				{ google_UserID: profile.id,
-					email: profile.email,
-					name: profile.displayName,
-					profilePic: profile.picture,
-				},
-				{ upsert: true }
-			)
-				.then(() => {
-					console.log("profile inserted or found")
-					return cb(null, profile,accessToken)
-				})
-				.catch((err) => {
-					console.log(err)
-					return cb(err)
-				})
+		function (request, accessToken, refreshToken, profile, cb) {	
+						User.updateOne(
+							{	google_UserID: profile.id},
+							{
+								google_UserID: profile.id,
+								email: profile.email,
+								name: profile.displayName,
+								profilePic: profile.picture,
+								loginType: "google"
+							},
+							{ upsert: true }
+						)
+							.then(() => {
+								console.log("profile inserted or found")
+								return cb(null, profile, accessToken)
+							})
+							.catch((err) => {
+								console.log(err)
+								return cb(err)
+							})
 		}
 	)
 )

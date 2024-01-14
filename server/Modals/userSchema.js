@@ -2,44 +2,49 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    google_UserID : {
-        type: String,
-        required: false,
-        unique: true
-    },
-    email : {
-        type: String,
-        required: false,
-        unique: true
-    },
-    Username:{
-        type: String,
-        required: false,
-        unique: true
-    },
-    name : {
-        type: String,
-        required: true,
-    },
-
-    profilePic : {
-        type: String,
-        required: false,
-    },
-    password: {
-        type:String,
-        required: false,
-    },
-    loginType:{
-        type:String,
-        required: true,
-    },
-    phone: String
+	google_UserID: {
+		type: String,
+		required: function () {
+			return this.loginType === "google"
+		},
+	},
+	email: {
+		type: String,
+		required: function () {
+			return this.loginType === "username" || this.loginType === "google"
+		},
+	},
+	username: {
+		type: String,
+		required: function () {
+			return this.loginType === "twitter" || this.loginType === "username"
+		},
+	},
+	name: {
+		type: String,
+		required: true,
+	},
+	profilePic: {
+		type: String,
+		required: false,
+	},
+	password: {
+		type: String,
+		required: function () {
+			return this.loginType === "username"
+		},
+	},
+	loginType: {
+		type: String,
+		required: true,
+		enum: ["username", "google", "twitter"],
+	},
+	phone: {
+		type: String,
+		required: false,
+	},
 })
 
-// export default userSchema; to export only one model
-
-// To import multiple models
 
 const User = mongoose.model('User',userSchema);
 
