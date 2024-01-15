@@ -1,46 +1,78 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
 import { FcGoogle } from "react-icons/fc"
 import { BsTwitterX } from "react-icons/bs"
 import axios from 'axios'
-import {toast, ToastContainer} from "react-toastify"
+import {toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import 	check from "../assets/images/check.png"
 import warning from '../assets/images/warning.png'
 import {useSelector} from 'react-redux'
 
 
-const Login = () => {
-	const [email, setEmail] = useState("")
-	const [password, setPassword] = useState("")
-	const [Name,setName] = useState("")
-	const emailVerified = useSelector((state)=> state.user.emailVerified)
+const Signup = () => {
+	const emailVerified = useSelector((state) => state.user.emailVerified)
+	console.log(emailVerified)
+
+	const [formData, setFormData] = useState({
+		Name: "",
+		email: "",
+		password: ""
+	});
+
+	const handleInputChange = (e) => {
+		e.preventDefault()
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	const saveFormData = () => {
+			sessionStorage.setItem("formData", JSON.stringify(formData))
+		}
+
+	useEffect(() => {
+		const storedData = sessionStorage.getItem("formData")
+
+		if (storedData) {
+			setFormData(JSON.parse(storedData))
+		}
+	}, [])
+
 
 	const handleEmail = ()=>{
-		if (!(email && password && Name)){
-			toast.warning("Please Fill all the fields to verify")
-			return null
+		if (!emailVerified) {
+			if (!(formData.email && formData.password && formData.Name)) {
+				toast.warning("Please fill all the fields to continue")
+				return null
+			}
+			saveFormData();
+		
+			axios.post(
+						"http://localhost:3000/send-otp",
+						{
+							email: formData.email,
+							name: formData.Name,
+						},
+						{
+							withCredentials: true,
+							headers: {
+								"Content-Type": "application/json",
+							},
+						}
+					)
+					.then(() => {
+						toast.info("Sending OTP...")
+						setInterval(async() => {
+						window.open("http://localhost:5173/email/verification", "_self")
+							}, 1000)
+					})
+					.catch((err) => {
+						if (err.response.data.message) {
+							toast.error(err.response.data.message)
+						}
+					})
+		
 		}
-		axios.post(
-				"http://localhost:3000/send-otp",
-				{
-					email: email,
-					name: Name,
-				},
-				{
-					withCredentials: true,
-					headers: {
-						"Content-Type": "application/json",
-					},
-				}
-			)
-			.then((res) => {
-				console.log(res.data)
-				window.open("http://localhost:5173/email/verification", "_self")
-			})
-			.catch((err) => console.log(err))
-
 	}
 
 	const handleSignup = async (e) => {
@@ -49,13 +81,15 @@ const Login = () => {
 			toast.warning("Verify email to continue")
 			return null
 		}
-		await axios.post('http://localhost:3000/register',{email: email,password: password,username: Name},{
+		await axios.post('http://localhost:3000/register',{email: formData.email,password: formData.password,username: formData.Name},{
 			withCredentials: true,
 			headers: {
 				"Content-Type": "application/json",
 			}
 		})
 		.then(()=>{
+			localStorage.clear()
+			sessionStorage.clear()
 			toast.success("Account Created Successfully")
 			window.location.href = "/";
 		})
@@ -77,7 +111,7 @@ const Login = () => {
 	}
 	
 	return (
-		<div className="font-sans h-[98vh] flex justify-center items-center bg-blue-600">
+		<div className="font-sans h-[100vh] flex justify-center items-center bg-blue-600">
 			<div className="bg-white rounded-sm flex-col border md:h-[94%] h-[70%] md:w-[35%] w-[90%] p-5 border-solid border-[rgb(231,231,231)] flex justify-center items-center">
 				<h2 className="text-2xl mt-12 mb-4 font-mono text-blue-700">
 					Create your Account
@@ -87,19 +121,21 @@ const Login = () => {
 					onSubmit={handleSignup}>
 					<input
 						className="invalid:border-red-500 w-[100%] m-[5px] p-2.5 bg-slate-200"
+						name="Name"
 						type="text"
 						placeholder="Enter your username"
-						value={Name}
-						onChange={(e) => setName(e.target.value)}
+						value={formData.Name}
+						onChange={handleInputChange}
 						required
 					/>
 					<div className="flex items-center w-[100%] px-0 mx-0 py-2.5 gap-2 ">
 						<input
 							className="invalid:border-red-500 w-[70%] my-[5px] p-2.5 bg-slate-200"
+							name="email"
 							type="email"
 							placeholder="Enter your email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
+							value={formData.email}
+							onChange={handleInputChange}
 							required
 						/>
 						{emailVerified ? (
@@ -124,10 +160,11 @@ const Login = () => {
 					</div>
 					<input
 						className="w-[100%] m-[5px] p-2.5 bg-slate-200"
+						name="password"
 						type="password"
 						placeholder="Enter your password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
+						value={formData.password}
+						onChange={handleInputChange}
 						required
 					/>
 
@@ -161,9 +198,8 @@ const Login = () => {
 					</div>
 				</div>
 			</div>
-			<ToastContainer />
 		</div>
 	)
 }
 
-export default Login
+export default Signup

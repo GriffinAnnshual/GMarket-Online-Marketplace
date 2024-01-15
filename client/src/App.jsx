@@ -1,7 +1,6 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Footer from './components/Footer';
 import Home from './pages/Home';
-import Signup from './pages/SignUp';
+import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Chat from './pages/Chat';
 import VerifyMail from './pages/VerifyMail'
@@ -47,7 +46,6 @@ function App() {
 				element={<VerifyMail/>}
 				/>
 			</Routes>
-			<Footer />
 			<ToastContainer />
 		</Router>
 	)

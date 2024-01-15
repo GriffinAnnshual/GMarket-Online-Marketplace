@@ -5,14 +5,13 @@ import { Link } from "react-router-dom";
 import Product from "../components/Product";
 import prodcut_details from "./../utils/product_details";
 import Header from './../components/Header';
+import Footer from "./../components/Footer"
 import "../assets/styles/home.css";
 import slider1 from "../assets/images/slider1.png";
 import slider2 from "../assets/images/slider2.png";
 import slider3 from "../assets/images/slider3.png";
 import './../assets/styles/product.css';
 import axios from 'axios';
-import {ToastContainer} from 'react-toastify'
-import "react-toastify/dist/ReactToastify.css"
 
 const Home = () => {
 	const [loggedIn, setLoggedIn] = useState(false);
@@ -82,7 +81,7 @@ const Home = () => {
 					</div>
 				</div>
 			</div>
-			<ToastContainer/>
+			<Footer/>
 		</main>
 	);
 };

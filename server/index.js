@@ -322,7 +322,20 @@ app.post("/send-otp", async(req,res)=>{
 	try{
 	
 	const { email, name } = req.body
-
+	const userNameExist = await User.findOne({ username: name })
+	const userEmail = await User.findOne({
+		email: email,
+		loginType: "username",
+	})
+	if (userNameExist) {
+		return res
+			.status(401)
+			.json({ exists: true, message: "Username Already taken" })
+	} else if (userEmail) {
+		return res
+			.status(401)
+			.json({ exists: true, message: "Email Already taken" })
+	}
 	const otp = otpGenerator.generate(6, {
 		upperCaseAlphabets: false,
 		specialChars: false,
@@ -376,19 +389,16 @@ app.post("/send-otp", async(req,res)=>{
 
 
 app.get("/verify/email", async(req,res)=>{
-try{
-	console.log(req.session)
-	const otp = req.query.verify
-	const mail = req.session.email
-	if (bcrypt.compareSync(otp, await client.get(mail))) {
-		res.sendStatus(200).json({ success: true, message: "Verified email" })
-	}
-	else{
-		res.sendStatus(400).json({ success: false, message: "Invalid OTP" })
-	}
-}
-catch(err){
-	res.sendStatus(400).json({ message: err.message})
+
+const otp = req.query.verify
+const mail = req.session.email
+console.log(otp)
+console.log(mail)
+const isMatch = bcrypt.compareSync(otp, await client.get(mail))
+if (!isMatch){
+	res.status(401).json({ exists: false, message: 'Incorrect OTP' });
+}else{
+	res.status(200).json({ exists: true, message: 'OK' }); 
 }
 })
 

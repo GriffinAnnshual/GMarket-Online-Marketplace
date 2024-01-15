@@ -4,7 +4,7 @@ import { Link} from "react-router-dom"
 import { FcGoogle } from "react-icons/fc";
 import { BsTwitterX } from "react-icons/bs"
 import axios from 'axios'
-import {toast, ToastContainer} from "react-toastify"
+import {toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
 
@@ -43,7 +43,7 @@ const Login = () => {
 	}
 
 	return (
-		<div className="font-sans h-[98vh] flex justify-center items-center bg-blue-600">
+		<div className="font-sans h-[100vh] flex justify-center items-center bg-blue-600">
 			<div className="bg-white flex-col border h-[80%] md:w-[30%] w-[90%] p-5 border-solid border-[rgb(231,231,231)] flex justify-center items-center">
 				<h2 className="text-2xl mt-12 mb-4 font-mono text-blue-700">
 					Welcome to GMarket
@@ -98,18 +98,6 @@ const Login = () => {
 					</div>
 				</div>
 			</div>
-			<ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				theme="light"
-			/>
 		</div>
 	)
 }

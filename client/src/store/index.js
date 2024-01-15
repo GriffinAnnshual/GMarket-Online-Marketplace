@@ -6,6 +6,7 @@ import userReducer from './reducers/userReducer.js'
 const persistConfig = {
 	key: "root",
 	storage,
+	blacklist: ["navigation"],
 }
 
 const persistedReducer = persistReducer(persistConfig, userReducer)

@@ -23,7 +23,8 @@ function Header(props) {
 				}
 			).then(()=>{
 				toast.info("Logged out!")
-				window.location.reload()
+				setInterval(()=>{window.location.reload()},1000)
+				
 			})
 		} catch (err) {
 			if (err.response.data.message) {
