@@ -8,7 +8,9 @@ import {toast, ToastContainer} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import 	check from "../assets/images/check.png"
 import warning from '../assets/images/warning.png'
-import {useSelector} from '@reduxjs/toolkit'
+import {useSelector} from 'react-redux'
+
+
 const Login = () => {
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
@@ -20,18 +22,25 @@ const Login = () => {
 			toast.warning("Please Fill all the fields to verify")
 			return null
 		}
-		axios.post("/send-otp",{
-			email: email,
-			name: Name,
-		},{
-			headers:{
-				"Content-Type": "application/json"
-			}
-		}).then((res)=>{
-			console.log(res.data)
-			window.location.href="/email/verification"
-		})
-		.catch((err)=> console.log(err))
+		axios.post(
+				"http://localhost:3000/send-otp",
+				{
+					email: email,
+					name: Name,
+				},
+				{
+					withCredentials: true,
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			)
+			.then((res) => {
+				console.log(res.data)
+				window.open("http://localhost:5173/email/verification", "_self")
+			})
+			.catch((err) => console.log(err))
+
 	}
 
 	const handleSignup = async (e) => {

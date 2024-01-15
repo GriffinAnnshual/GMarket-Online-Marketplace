@@ -321,9 +321,7 @@ app.get('/getUser',isAuthenticated,function(req, res){
 app.post("/send-otp", async(req,res)=>{
 	try{
 	
-	// const { email, name } = req.body
-	const email = "griffintbr@gmail.com"
-	const name = "griffin"
+	const { email, name } = req.body
 
 	const otp = otpGenerator.generate(6, {
 		upperCaseAlphabets: false,
@@ -333,7 +331,7 @@ app.post("/send-otp", async(req,res)=>{
 	const hashedOtp = bcrypt.hashSync(otp, salt)
 
 
-	await client.set("griffintbr@gmail.com", hashedOtp, "EX", 300)
+	await client.set(email, hashedOtp, "EX", 300)
 
 		const getHTMLTemplate = (templateName, params) => {
 			const templatePath = path.join(
@@ -367,7 +365,7 @@ app.post("/send-otp", async(req,res)=>{
 			console.log('Email sent:', info.response);
 		}
 		})
-
+		req.session.email = email
 		res.status(200).json({ email: otp, message: "email successfully sent" })
 
 	}catch(err){
@@ -379,14 +377,18 @@ app.post("/send-otp", async(req,res)=>{
 
 app.get("/verify/email", async(req,res)=>{
 try{
+	console.log(req.session)
 	const otp = req.query.verify
-	const mail = req.query.email
+	const mail = req.session.email
 	if (bcrypt.compareSync(otp, await client.get(mail))) {
-		res.send(200).json({ success: true, message: "Verified email" })
+		res.sendStatus(200).json({ success: true, message: "Verified email" })
+	}
+	else{
+		res.sendStatus(400).json({ success: false, message: "Invalid OTP" })
 	}
 }
 catch(err){
-	res.status(500).json({ message: err.message})
+	res.sendStatus(400).json({ message: err.message})
 }
 })
 
