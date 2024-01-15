@@ -1,9 +1,9 @@
 import bodyParser from 'body-parser';
-import express, { response } from 'express';
+import express from 'express';
 import session from 'express-session'; 
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';  
-import passport from './Middleware/auth.js'
+import passport from './Middleware/googleAuth.js'
 import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose'
 import MongoDBStore  from 'connect-mongodb-session';
@@ -15,9 +15,17 @@ import jwt from 'jsonwebtoken'
 import LoginWithTwitter from "login-with-twitter"
 import OAuth from "oauth-1.0a"
 import axios from 'axios'
-import e from 'express';
-
+import otpGenerator from 'otp-generator'
+import { createClient } from 'redis'
+import nodemailer from 'nodemailer'
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url';
+import {dirname} from 'path'
 dotenv.config()
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const oauth = OAuth({
 	consumer: {
@@ -43,7 +51,7 @@ const allowedOrigins = [
 	"https://accounts.google.com",
 	"https://api.twitter.com/",
 ]
-const secretKey = crypto.randomBytes(32).toString("hex")
+
 
 // Create a express app.
 const app = express();
@@ -52,7 +60,22 @@ app.use(cookieParser())
 // Body parser help to access the body values of the browser inside a server.
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Initialize redis client
+const client = await createClient({
+	password: process.env.VITE_APP_REDIS_SECRET,
+	socket: {
+		host: "redis-18218.c326.us-east-1-3.ec2.cloud.redislabs.com",
+		port: 18218,
+	},
+})
+	.on("error", (err) => console.log("Redis Client Error", err))
+	.connect()
+console.log(client.isReady)
+
 const uri = process.env.MONGO_URI
+
+const secretKey = crypto.randomBytes(32).toString("hex")
 
 const db = mongoose.connect(uri)
 
@@ -62,6 +85,17 @@ const store = new MongoDBSession({
 	uri: uri,
 	collection: "MySessions",
 })
+
+const transporter = nodemailer.createTransport({
+	host: "smtp.gmail.com",
+	port: 587,
+	secure: false,
+	auth: {
+		user: "noreply.gmarket@gmail.com",
+		pass: "esgx wvli yrxl xkpv",
+	},
+})
+
 app.use(
 	session({
 		secret: secretKey,
@@ -89,6 +123,8 @@ app.use(cors(
         credentials: true,
     }
 ))
+
+
 
 app.get(
 	"/auth/google",
@@ -171,7 +207,7 @@ app.get("/auth/twitter/callback", async(req,res)=>{
 					})
 					.catch((error) => {
 						res
-							.status(error.statusCode)
+							.status(error.status)
 							.json({ success: false, message: e.message })
 					})
 
@@ -193,7 +229,7 @@ app.get("/auth/twitter/callback", async(req,res)=>{
 			}
 		)
     }catch(e){
-        res.status(e.statusCode).json({success: false, message: e.message})
+        res.status(e.status).json({success: false, message: e.message})
     }
 })
 
@@ -281,7 +317,81 @@ app.get('/getUser',isAuthenticated,function(req, res){
    res.status(200).json(req.user)
 })
 
-  
+
+app.post("/send-otp", async(req,res)=>{
+	try{
+	
+	// const { email, name } = req.body
+	const email = "griffintbr@gmail.com"
+	const name = "griffin"
+
+	const otp = otpGenerator.generate(6, {
+		upperCaseAlphabets: false,
+		specialChars: false,
+	})
+	const salt = bcrypt.genSaltSync(9)
+	const hashedOtp = bcrypt.hashSync(otp, salt)
+
+
+	await client.set("griffintbr@gmail.com", hashedOtp, "EX", 300)
+
+		const getHTMLTemplate = (templateName, params) => {
+			const templatePath = path.join(
+				__dirname,
+				"public",
+				"templates",
+				`${templateName}.html`
+			)
+			let template = fs.readFileSync(templatePath, "utf-8")
+
+			for (const key in params) {
+				const regex = new RegExp(`{{${key}}}`, "g")
+				template = template.replace(regex, params[key])
+			}
+
+			return template
+		}
+		const mailOptions = {
+			to: email,
+			subject: "Welcome to GMarket! Confirm Your Account with OTP Verification",
+			html: getHTMLTemplate("mailTemplate", {
+				otp_code: otp,
+				to_mail: email,
+				customer_name: name,
+			}),
+		}
+		transporter.sendMail(mailOptions, (error, info) => {
+		if (error) {
+			console.log('Error:', error);
+		} else {
+			console.log('Email sent:', info.response);
+		}
+		})
+
+		res.status(200).json({ email: otp, message: "email successfully sent" })
+
+	}catch(err){
+		console.log(err)
+		res.status(500).json({ message: err.message })
+	}
+})
+
+
+app.get("/verify/email", async(req,res)=>{
+try{
+	const otp = req.query.verify
+	const mail = req.query.email
+	if (bcrypt.compareSync(otp, await client.get(mail))) {
+		res.send(200).json({ success: true, message: "Verified email" })
+	}
+}
+catch(err){
+	res.status(500).json({ message: err.message})
+}
+})
+
+
+
 app.post("/logout",(req, res)=>{
 	try{
 		store.destroy(req.session.id)
