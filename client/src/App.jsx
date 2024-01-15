@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Signup from './pages/SignUp';
 import Login from './pages/Login';
 import Chat from './pages/Chat';
+import VerifyMail from './pages/VerifyMail'
 import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
@@ -39,6 +40,11 @@ function App() {
 					exact
 					path="/chat/:id"
 					element={<Chat />}
+				/>
+				<Route
+				path="/email/verification"
+				exact
+				element={<VerifyMail/>}
 				/>
 			</Routes>
 			<Footer />

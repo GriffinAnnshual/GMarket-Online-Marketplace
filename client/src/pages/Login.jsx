@@ -59,6 +59,7 @@ const Login = () => {
 						onChange={(e) => setEmail(e.target.value)}
 						required
 					/>
+					
 					<input
 						className="w-[100%] m-[5px] p-2.5 bg-slate-200"
 						type="password"
