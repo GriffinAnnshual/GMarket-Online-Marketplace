@@ -12,8 +12,7 @@ import {useSelector} from 'react-redux'
 
 
 const Signup = () => {
-	const emailVerified = useSelector((state) => state.user.emailVerified)
-	console.log(emailVerified)
+	const emailVerified = useSelector((state) => state.auth.emailVerified)
 
 	const [formData, setFormData] = useState({
 		Name: "",
@@ -36,7 +35,7 @@ const Signup = () => {
 		if (storedData) {
 			setFormData(JSON.parse(storedData))
 		}
-	}, [])
+	}, [emailVerified])
 
 
 	const handleEmail = ()=>{
@@ -88,10 +87,12 @@ const Signup = () => {
 			}
 		})
 		.then(()=>{
-			localStorage.clear()
-			sessionStorage.clear()
 			toast.success("Account Created Successfully")
-			window.location.href = "/";
+			setInterval(()=>{
+				localStorage.clear()
+				sessionStorage.clear()
+				window.location.href = "/"
+			},1000)
 		})
 		.catch((err)=>{
 			if(err.response.data.message){

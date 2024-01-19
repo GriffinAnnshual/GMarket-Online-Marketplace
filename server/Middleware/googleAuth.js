@@ -9,11 +9,10 @@ dotenv.config()
 const uri = process.env.MONGO_URI
 
 mongoose.connect(uri)
+
 const db = mongoose.connection
 
-db.on("connected", () => {
-	console.log("Mongoose is connected")
-})
+db.on("connected", () => console.log("MongoDB is connected"))
 
 
 passport.use(

@@ -1,18 +1,17 @@
 import {configureStore} from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from "redux-persist"
 import storage from "redux-persist/lib/storage"
-import userReducer from './reducers/userReducer.js'
-
+import rootReducer from './modules/index.js'
 const persistConfig = {
 	key: "root",
 	storage,
 	blacklist: ["navigation"],
 }
 
-const persistedReducer = persistReducer(persistConfig, userReducer)
+const rootPersistReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
-    reducer: {user: persistedReducer}
+	reducer: rootPersistReducer,
 })
 const persistor = persistStore(store)
 

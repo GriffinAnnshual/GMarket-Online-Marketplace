@@ -77,7 +77,14 @@ const uri = process.env.MONGO_URI
 
 const secretKey = crypto.randomBytes(32).toString("hex")
 
-const db = mongoose.connect(uri)
+mongoose.connect(uri)
+
+const db = mongoose.connection
+
+db.on("connected", () => {
+	console.log("Connected to MongoDB")
+})
+
 
 const MongoDBSession = MongoDBStore(session)
 

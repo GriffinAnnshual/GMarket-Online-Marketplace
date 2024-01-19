@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux"
-import {setEmailVerified} from "../store/reducers/userReducer"
+import { setEmailVerified } from "../store/modules/auth/reducers"
 import {Link} from 'react-router-dom'
 import cartIcon from '../assets/images/shopping-cart.png'
 import mailSend from '../assets/images/mail-send.png'
@@ -10,7 +10,7 @@ import {toast, ToastContainer} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
 const VerifyMail = () => {
-	const emailVerified = useSelector((state) => state.user.emailVerified)
+	const emailVerified = useSelector((state) => state.auth.emailVerified)
 	console.log(emailVerified)
 	const [otp, setOtp] = useState("")
 	const dispatch = useDispatch();
