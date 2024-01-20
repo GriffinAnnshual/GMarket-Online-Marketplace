@@ -8,9 +8,6 @@ const cartSlice = createSlice({
         itemList: [],
         totalQuantity: 0,
         totalPrice: 0,
-        totalDiscount: 0,
-        totalShipping: 0,
-        totalPayable: 0,
         error: null
     }, 
     reducers: {
@@ -24,9 +21,6 @@ const cartSlice = createSlice({
             }
             state.totalQuantity += item.quantity
             state.totalPrice += item.price * item.quantity
-            state.totalDiscount += item.discount * item.quantity
-            state.totalShipping += item.shipping * item.quantity
-            state.totalPayable += item.payable * item.quantity
         },
         removeItemFromCart(state, action) {
             const item = action.payload
@@ -34,9 +28,6 @@ const cartSlice = createSlice({
             if (itemIndex !== -1) {
                 state.totalQuantity -= item.quantity
                 state.totalPrice -= item.price * item.quantity
-                state.totalDiscount -= item.discount * item.quantity
-                state.totalShipping -= item.shipping * item.quantity
-                state.totalPayable -= item.payable * item.quantity
                 state.itemList.splice(itemIndex, 1)
             }
         },
@@ -46,9 +37,6 @@ const cartSlice = createSlice({
             if (itemIndex !== -1) {
                 state.totalQuantity += item.quantity
                 state.totalPrice += item.price * item.quantity
-                state.totalDiscount += item.discount * item.quantity
-                state.totalShipping += item.shipping * item.quantity
-                state.totalPayable += item.payable * item.quantity
                 state.itemList[itemIndex].quantity = item.quantity
             }
         },
@@ -62,9 +50,6 @@ const cartSlice = createSlice({
             state.itemList = []
             state.totalQuantity = 0
             state.totalPrice = 0
-            state.totalDiscount = 0
-            state.totalShipping = 0
-            state.totalPayable = 0
             state.error = null
         }
     }

@@ -78,15 +78,12 @@ nav > ul > li{
 
 .Restaurant-card{
   border: 1px solid black;
-  margin: 10px 20px 30px 70px;
-  padding: 10px;
-  width: 310px;
-  height:450px;
-  border-radius: 25px;
-  box-shadow: 0px 10px 10px black;
+  margin: 10px 2px 30px 30px;
+  padding: 5px;
+  width: 240px;
+  height:300px;
+  border-radius: 10px;
   padding-bottom: 20px;
-
-  
 }
 
 .Restaurant-card:hover{
@@ -126,8 +123,6 @@ input{
 }
 .details-left h2{
   font-size: 1.5rem;
-  padding-bottom: 20px;
- 
 }
 .details-left h3{
 font-size: 1.2rem;;
@@ -150,3 +145,17 @@ font-size: 1.2rem;;
 .footer > p {
   margin-left: 2%;
 }
+
+ @media screen and (max-width: 700px) {
+  .Restaurant-card{
+  border: 1px solid black;
+  margin: 10px 2px 30px 30px;
+  padding: 5px;
+  width: 140px;
+  height:190px;
+  border-radius: 10px;
+  padding-bottom: 20px;
+}
+
+ }
+  

@@ -22,52 +22,63 @@ const Home = () => {
 
 	return (
 		<main>
-			<Header/>
+			<Header />
 			<div className="flex flex-col">
 				<Carousel
 					stopOnHover={false}
 					autoPlay={true}
 					interval={3000}
 					infiniteLoop={true}
-					className="-z-50 carousel h-[20%] w-[100%] flex flex-col items-center"
-				>
+					className="-z-50 carousel h-[20%] w-[100%] flex flex-col items-center">
 					<div>
-						<img src={slider3} alt="Slider 3" />
+						<img
+							src={slider3}
+							alt="Slider 3"
+						/>
 					</div>
 					<div>
-						<img src={slider2} alt="Slider 2" />
+						<img
+							src={slider2}
+							alt="Slider 2"
+						/>
 					</div>
 					<div>
-						<img src={slider1} alt="Slider 1" />
+						<img
+							src={slider1}
+							alt="Slider 1"
+						/>
 					</div>
 				</Carousel>
-				<div className="">
-					<p className="pl-10 font-bold font-montserrat text-[5rem]">
+				<div className="z-10 absolute top-[50%] md:top-[105%] border-t-4 border-t-white p-4 bg-white w-screen pb-[32%] md:pb-[16%] flex flex-col items-center">
+					<div className="pl-72 whitespace-nowrap md:pl-5 font-bold font-montserrat text-[20px] md:text-[3rem] relative right-40">
 						Successfully Serving for 10+ years
-					</p>
+					</div>
 				</div>
-			</div>
-
-			<div className="courses">
-				<div className="fon-bold font-montserrat text-2xl">
-					<h2 className="px-10 pt-20 pb-5 text-[3rem]">Explore products</h2>
-					<span className="pl-10">See more</span>
-				</div>
-				<div className="">
-					<div className="course-box-area py-10">
-						<div className="cards">
-							{prodcut_details.map((product) => (
-								<Link to={`/product/${product.id}`} key={product.id}>
-									<Product key={product.id} product={product} />
-								</Link>
-							))}
+				<div className="courses">
+					<div className="fon-bold font-montserrat text-xl pt-5">
+						<h2 className="md:px-10  px-5 md:pb-2 pb-0 md:text-[2rem]">Explore products</h2>
+					</div>
+					<div className="">
+						<div className="course-box-area py-1 md:py-10">
+							<div className="cards">
+								{prodcut_details.map((product) => (
+									<Link
+										to={`/product/${product.id}`}
+										key={product.id}>
+										<Product
+											key={product.id}
+											product={product}
+										/>
+									</Link>
+								))}
+							</div>
 						</div>
 					</div>
 				</div>
+				<Footer />
 			</div>
-			<Footer/>
 		</main>
-	);
+	)
 };
 
 export default Home;

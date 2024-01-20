@@ -8,7 +8,7 @@
 	 text-align: center;
 }
  .trusted p {
-	 font-size: 1.2rem;
+	
 	 font-weight: bold;
 	 color: gray;
 	 margin: 0px 0px 15px 0px;
@@ -16,9 +16,7 @@
  .trusted .brands img {
 	 margin: 10px 30px;
 }
- .courses {
-	 margin: 30px 0px;
-}
+
  .courses .header {
 	 display: flex;
 	 justify-content: space-between;
@@ -86,12 +84,12 @@
  .nav-belt .nav-mid .nav-box3 > a {
 	 text-decoration: none;
 	 color: black !important;
-	 font-size: 13px;
+	 
 }
  .nav-belt .nav-mid .nav-box3 > a:visited {
 	 text-decoration: none;
 	 color: black !important;
-	 font-size: 13px;
+	 
 }
  .nav-belt .nav-box4 {
 	 width: 100%;
@@ -105,7 +103,7 @@
 	 border: solid #fff;
 }
  .nav-belt .nav-search::placeholder {
-	 font-size: 15px;
+	
 }
  .nav-belt .nav-box5 {
 	 color: black !important;
@@ -150,7 +148,7 @@
 }
  .nav-belt .nav-box9 .cart_number {
 	 position: absolute;
-	 font-size: 18px;
+	 
 	 font-weight: bold;
 	 color: #e29105;
 	 background-color: #131921;
@@ -238,6 +236,9 @@
 	 */
 	 padding: 0px 0px 5px 0px;
 }
+nav{
+	padding: 0px 0px 0px 0px;
+}
  @media screen and (max-width: 700px) {
 	 .nav-belt .nav-left .nav-left-box {
 		 margin: 4px 0px;
@@ -253,7 +254,7 @@
 		 height: 30px;
 	}
 	 .nav-belt .nav-box9 .cart_number {
-		 font-size: 14px;
+		 
 		 top: 3px;
 		 left: 15px;
 		 padding: 2px;
@@ -276,22 +277,25 @@
  ul li ul li a { transition: all 0.5s ease; }
     margin: 0 auto;
     display: block;
-    padding: 0 20% 0 0;  
+    padding: 0 10% 0 0;  
     text-align: center;
-    font-size: 1.5rem;
+
 
     ul li {
       list-style: none;
       margin: 0 auto;
       display: inline-block;
-      padding: 3% 30px;
+      padding: 4% 0px;
+	  padding-right:5px;
+	  right: 15px;
       position: relative;
       text-decoration: none;
       text-align: center;
-      font-family: arvo;
+      font-family: arvo;;
     }
 
     li a {
+		padding-left: 20px;
       color: black;
     }
 
@@ -304,12 +308,15 @@
     }
 
     ul li ul {
+		z-index: 30;
       visibility: hidden;
       opacity: 0;
-      position: absolute;
-padding-left: 0;
+      position: absolute;	
+	  padding-left: 0;
       left: 0;
       display: none;
+      padding-top: 20px;
+
       background: white;
     }
 
@@ -318,11 +325,28 @@ padding-left: 0;
       visibility: visible;
       opacity: 1;
       display: block;
-      min-width: 250px;
       text-align: left;
-      padding-top: 20px;
+      padding-top: px;
       box-shadow: 0px 3px 5px -1px #ccc;
     }
+	ul li ul:hover {
+      visibility: visible;
+      opacity: 1;
+      display: block;
+      min-width: 2px;
+      text-align: left;
+      box-shadow: 0px 3px 5px -1px #ccc;
+    }
+	@media screen and (max-width: 700px) {
+	ul li ul:hover {
+      visibility: visible;
+      opacity: 1;
+      display: block;
+      min-width: 2px;
+      text-align: left;
+      box-shadow: 0px 3px 5px -1px #ccc;
+    }
+  }
 
     ul li ul li {
       clear: both;
@@ -337,5 +361,7 @@ padding-left: 0;
       border-left: 2px solid #3ca0e7;
       transition: all 0.3s ease;
     }
+	
   }
+
 }
