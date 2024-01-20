@@ -6,10 +6,14 @@ import '../assets/styles/home.css'
 import axios from 'axios'
 import { FaRegUserCircle } from "react-icons/fa";
 import {toast} from 'react-toastify'
-function Header(props) {
+import {useSelector, useDispatch} from 'react-redux'
+import { logout } from "../store/modules/auth/actions"
 
-	const { log, user } = props
-
+const  Header = () => {
+	
+	const dispatch = useDispatch()
+	const isAuthenticated = useSelector((state)=> state.auth.isAuthenticated)
+	const user = useSelector((state)=> state.auth.user)
 	const handleLogout = async () => {
 		try {
 			await axios.post(
@@ -22,6 +26,7 @@ function Header(props) {
 					},
 				}
 			).then(()=>{
+				dispatch(logout())
 				toast.info("Logged out!")
 				setInterval(()=>{window.location.reload()},1000)
 				
@@ -87,7 +92,7 @@ function Header(props) {
 						</div>
 					</Link>
 					<div className="p-2">
-						{log ? (
+						{isAuthenticated ? (
 							<div className="drop-down ">
 								<div className="primary-navigation">
 									<ul>

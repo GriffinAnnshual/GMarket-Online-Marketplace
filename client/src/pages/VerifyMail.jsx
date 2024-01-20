@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux"
-import { setEmailVerified } from "../store/modules/auth/reducers"
+import { setEmailVerified } from "../store/modules/auth/actions"
 import {Link} from 'react-router-dom'
 import cartIcon from '../assets/images/shopping-cart.png'
 import mailSend from '../assets/images/mail-send.png'

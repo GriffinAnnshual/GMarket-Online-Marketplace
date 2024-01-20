@@ -1,6 +1,6 @@
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import { Link } from "react-router-dom";
 import Product from "../components/Product";
 import prodcut_details from "./../utils/product_details";
@@ -11,34 +11,18 @@ import slider1 from "../assets/images/slider1.png";
 import slider2 from "../assets/images/slider2.png";
 import slider3 from "../assets/images/slider3.png";
 import './../assets/styles/product.css';
-import axios from 'axios';
-
+import {useDispatch} from 'react-redux'
+import { getUser } from "../store/modules/auth/actions";
 const Home = () => {
-	const [loggedIn, setLoggedIn] = useState(false);
-	const [user, setUser] = useState(null)
+	const dispatch = useDispatch()
+	
 	useEffect(() => {
-		const isAuth = async () => {
-			try {
-				const res = await axios.get("http://localhost:3000/getUser", {
-					withCredentials: true,
-					headers: {
-						"Content-Type": "application/json",
-					},
-				})
-					setLoggedIn(true)
-					setUser(res.data)
-			} catch (error) {
-				console.log("Authentication failed.");
-				setLoggedIn(false);
-			}
-		};
-		isAuth();
-	}, [loggedIn]);
-
+		dispatch(getUser());
+	},[dispatch]);
 
 	return (
 		<main>
-			<Header log={loggedIn ? true : false} user={user} />
+			<Header/>
 			<div className="flex flex-col">
 				<Carousel
 					stopOnHover={false}
