@@ -2,11 +2,11 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Home from './pages/Home';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Chat from './pages/Chat';
 import VerifyMail from './pages/VerifyMail'
 import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -37,8 +37,8 @@ function App() {
 				/>
 				<Route
 					exact
-					path="/chat/:id"
-					element={<Chat />}
+					path="/cart"
+					element={<Cart />}
 				/>
 				<Route
 				path="/email/verification"
@@ -46,7 +46,14 @@ function App() {
 				element={<VerifyMail/>}
 				/>
 			</Routes>
-			<ToastContainer />
+			<ToastContainer
+				className="w-[60%] h-[10%] md:w-[30%] md:whitespace-nowrap md:h-[10%]"
+				autoClose={1500}
+				position='top-center'
+				hideProgressBar={true}
+				newestOnTop={true}
+				theme="light"
+				/>
 		</Router>
 	)
 }

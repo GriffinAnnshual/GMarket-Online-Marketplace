@@ -81,7 +81,7 @@ nav > ul > li{
   margin: 10px 2px 30px 30px;
   padding: 5px;
   width: 240px;
-  height:300px;
+  height:310px;
   border-radius: 10px;
   padding-bottom: 20px;
 }
@@ -149,10 +149,10 @@ font-size: 1.2rem;;
  @media screen and (max-width: 700px) {
   .Restaurant-card{
   border: 1px solid black;
-  margin: 10px 2px 30px 30px;
+  margin: 10px 10px 30px 10px;
   padding: 5px;
-  width: 140px;
-  height:190px;
+  width: 160px;
+  height:260px;
   border-radius: 10px;
   padding-bottom: 20px;
 }

@@ -1,7 +1,6 @@
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { useEffect} from "react";
-import { Link } from "react-router-dom";
 import Product from "../components/Product";
 import prodcut_details from "./../utils/product_details";
 import Header from './../components/Header';
@@ -62,14 +61,9 @@ const Home = () => {
 						<div className="course-box-area py-1 md:py-10">
 							<div className="cards">
 								{prodcut_details.map((product) => (
-									<Link
-										to={`/product/${product.id}`}
-										key={product.id}>
 										<Product
 											key={product.id}
-											product={product}
-										/>
-									</Link>
+											product={product}/>
 								))}
 							</div>
 						</div>

@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css"
 import 	check from "../assets/images/check.png"
 import warning from '../assets/images/warning.png'
 import {useSelector} from 'react-redux'
+import cartIcon from "../assets/images/shopping-cart.png"
+
 
 
 const Signup = () => {
@@ -112,8 +114,18 @@ const Signup = () => {
 	}
 	
 	return (
-		<div className="font-sans h-[100vh] flex justify-center items-center bg-blue-600">
-			<div className="bg-white rounded-sm flex-col border md:h-[94%] h-[70%] md:w-[35%] w-[90%] p-5 border-solid border-[rgb(231,231,231)] flex justify-center items-center">
+		<div className="font-sans h-[100vh] w-screen flex justify-center items-center bg-blue-600">
+			<div className="absolute  md:right-[80%] top-0  items-center pb-2 justify-center flex flex-row gap-4 pt-5">
+				<img
+					src={cartIcon}
+					className="w-[8%] md:w-[15%]"></img>
+				<Link to="/">
+					<h1 className="font-montserrat text-2xl md:text-3xl font-bold text-[#37404a]">
+						G Market
+					</h1>
+				</Link>
+			</div>
+			<div className="bg-white rounded-sm flex-col border md:h-[94%] h-[80%] md:w-[35%] w-[90%] p-5 border-solid border-[rgb(231,231,231)] flex justify-center items-center">
 				<h2 className="text-2xl mt-12 mb-4 font-mono text-blue-700">
 					Create your Account
 				</h2>
@@ -171,7 +183,7 @@ const Signup = () => {
 
 					<div className="flex w-full justify-center gap-2 pt-4 pb-2">
 						<input
-							className="text-xl bg-blue-600 text-[white] cursor-pointer font-mono rounded-md py-1 "
+							className="text-xl w-full bg-blue-600 text-[white] cursor-pointer font-mono rounded-md py-1 "
 							type="submit"
 							id=""
 							value="Signup"

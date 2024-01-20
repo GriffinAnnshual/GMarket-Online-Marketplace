@@ -16,28 +16,31 @@ const cartSlice = createSlice({
             const itemIndex = state.itemList.findIndex(item => item.id === action.payload.id)
             if (itemIndex === -1) {
                 state.itemList.push(item)
+                state.totalQuantity += 1
             } else {
-                state.itemList[itemIndex].quantity += item.quantity
+                state.itemList[itemIndex].quantity += 1
             }
-            state.totalQuantity += item.quantity
-            state.totalPrice += item.price * item.quantity
+            state.totalPrice += item.price
         },
         removeItemFromCart(state, action) {
             const item = action.payload
-            const itemIndex = state.itemList.findIndex(item => item.id === action.payload.id)
-            if (itemIndex !== -1) {
-                state.totalQuantity -= item.quantity
-                state.totalPrice -= item.price * item.quantity
-                state.itemList.splice(itemIndex, 1)
+            const itemIndex = state.itemList.find(item => item.id === action.payload.id)
+            if (itemIndex) {
+                state.totalPrice -= item.price 
+                if (itemIndex.quantity === 1){
+                state.itemList = state.itemList.filter((items)=> items.id !== action.payload.id)
+                state.totalQuantity -= 1;
+                }else{
+                    itemIndex.quantity -= 1
+                }
             }
         },
         updateItemQuantity(state, action) {
             const item = action.payload
-            const itemIndex = state.itemList.findIndex(item => item.id === action.payload.id)
-            if (itemIndex !== -1) {
-                state.totalQuantity += item.quantity
-                state.totalPrice += item.price * item.quantity
-                state.itemList[itemIndex].quantity = item.quantity
+            const itemIndex = state.itemList.find(item => item.id === action.payload.id)
+            if (itemIndex) {
+                state.totalPrice += item.price
+                itemIndex.quantity += 1
             }
         },
         setCartError(state, action) {
@@ -54,5 +57,6 @@ const cartSlice = createSlice({
         }
     }
 })
-
-export default cartSlice;
+export const actions = cartSlice.actions
+const cartReducer = cartSlice.reducer
+export default cartReducer

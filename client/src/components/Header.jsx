@@ -13,6 +13,7 @@ const  Header = () => {
 
 	const dispatch = useDispatch()
 	const isAuthenticated = useSelector((state)=> state.auth.isAuthenticated)
+	const totalQuantity = useSelector((state)=> state.cart.totalQuantity)
 	const user = useSelector((state)=> state.auth.user)
 	const handleLogout = async () => {
 		try {
@@ -88,6 +89,12 @@ const  Header = () => {
 								src={cartIcon}
 								alt=""
 							/>
+
+							{!(totalQuantity === 0) && (
+								<div className="relative right-2 bottom-2 text-white text-sm w-[30%] h-4 flex justify-center items-center rounded-full p-1 bg-red-600">
+									{totalQuantity}
+								</div>
+							)}
 							<p>cart</p>
 						</div>
 					</Link>

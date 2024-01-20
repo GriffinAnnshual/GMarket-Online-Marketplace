@@ -6,7 +6,7 @@ import { BsTwitterX } from "react-icons/bs"
 import axios from 'axios'
 import {toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
-
+import cartIcon from "../assets/images/shopping-cart.png"
 
 const Login = () => {
 	const [email, setEmail] = useState("")
@@ -46,6 +46,16 @@ const Login = () => {
 
 	return (
 		<div className="font-sans h-[100vh] flex justify-center items-center bg-blue-600">
+			<div className="absolute  md:right-[80%] top-0  items-center pb-2 justify-center flex flex-row gap-4 pt-5">
+				<img
+					src={cartIcon}
+					className="w-[8%] md:w-[15%]"></img>
+				<Link to="/">
+					<h1 className="font-montserrat text-2xl md:text-3xl font-bold text-[#37404a]">
+						G Market
+					</h1>
+				</Link>
+			</div>
 			<div className="bg-white flex-col border h-[80%] md:w-[30%] w-[90%] p-5 border-solid border-[rgb(231,231,231)] flex justify-center items-center">
 				<h2 className="text-2xl mt-12 mb-4 font-mono text-blue-700">
 					Welcome to GMarket
@@ -61,7 +71,7 @@ const Login = () => {
 						onChange={(e) => setEmail(e.target.value)}
 						required
 					/>
-					
+
 					<input
 						className="w-[100%] m-[5px] p-2.5 bg-slate-200"
 						type="password"
@@ -72,7 +82,7 @@ const Login = () => {
 					/>
 					<div className="flex w-full justify-center gap-2 pt-4 pb-2">
 						<input
-							className="text-xl bg-blue-600 text-[white] cursor-pointer font-mono rounded-md py-1 "
+							className="text-xl bg-blue-600 text-[white] cursor-pointer font-mono rounded-md py-1 w-full "
 							type="submit"
 							id=""
 							value="Login"
