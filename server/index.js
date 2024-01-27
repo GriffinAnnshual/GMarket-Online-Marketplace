@@ -349,7 +349,7 @@ app.post("/send-otp", async(req,res)=>{
 	})
 	const salt = bcrypt.genSaltSync(9)
 	const hashedOtp = bcrypt.hashSync(otp, salt)
-
+	
 
 	await client.set(email, hashedOtp, "EX", 300)
 

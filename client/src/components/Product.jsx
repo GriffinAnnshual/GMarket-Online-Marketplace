@@ -61,7 +61,7 @@ const Product = (props) => {
 						</div>
 					</div>
 					<div className="flex flex-col">
-						<p className="text-slate-900 md:text-sm text-[0.65rem]">
+						<p className="text-slate-900 md:text-[0.75rem] text-[0.65rem]">
 							Seller : {seller}
 						</p>
 						<p className="md:text-sm text-[0.65rem]"> Rating: {rating}</p>
