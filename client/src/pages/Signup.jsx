@@ -4,14 +4,13 @@ import { Link } from "react-router-dom"
 import { FcGoogle } from "react-icons/fc"
 import { BsTwitterX } from "react-icons/bs"
 import axios from 'axios'
-import {toast} from "react-toastify"
-import "react-toastify/dist/ReactToastify.css "
+import { toast } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
 
 import 	check from "../assets/images/check.png"
 import warning from '../assets/images/warning.png'
 import {useSelector} from 'react-redux'
 import cartIcon from "../assets/images/shopping-cart.png"
-
 
 
 const Signup = () => {

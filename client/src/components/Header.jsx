@@ -53,8 +53,8 @@ const  Header = () => {
 					</Link>
 				</div>
 			</div>
-			<div className="flex gap-[15%] md:flex-row flex-col justify-between items-center p-[1%] md:pr-20">
-				<div className="p-2 flex max-w-full mx-auto px-0 md:px-5 gap-2 md:gap-[5%] items-center md:w-[50%]">
+			<div className="flex gap-[15%] md:gap-[9%] md:flex-row flex-col items-center p-[1%] md:pr-[1%]">
+				<div className="p-2 flex max-w-full mx-auto px-0 md:px-2 gap-2 md:gap-[5%] items-center md:w-[50%]">
 					<Link to="/">
 						<div className=" md:text-xl nav-box nav-left-box nav-box1 ">
 							<h3>Marketplace</h3>
@@ -75,14 +75,14 @@ const  Header = () => {
 						</div>
 					</div>
 				</div>
-				<div className="flex justify-evenly gap-2 md:gap-4 items-center inte md:text-xl md:py-0 py-2">
+				<div className="flex justify-evenly gap-2 md:gap-4 items-center md:text-xl md:py-0 py-2">
 					<Link to="/bid">
 						<div className="border-2 rounded-md border-blue-600 p-1 text-sm md:text-lg">
 							<h3>AuctionPlace</h3>
 						</div>
 					</Link>
 					<Link to="/cart">
-						<div className="text-sm md:text-lg md:pr-10 mr-3 flex rounded-md items-center gap-2 border-2 border-blue-600 px-2 py-1">
+						<div className="text-sm md:text-lg md:pr-10 mr-3 flex rounded-md items-center gap-2 border-2 border-blue-600 px-2 py-1 pr-8">
 							{/* <div className="cart_number">{user?.cart.length}</div> */}
 							<img
 								className="w-[20px] md:w-[30px]"
@@ -98,13 +98,13 @@ const  Header = () => {
 							<p>cart</p>
 						</div>
 					</Link>
-					<div className="md:p-2  p-0 text-sm md:text-lg">
+					<div className="md:p-2  p-0 text-sm md:text-lg md:w-[150%] w-[250%]">
 						{isAuthenticated ? (
 							<div className="text-sm md:text-lg drop-down ">
 								<div className="primary-navigation">
 									<ul>
 										<li className="bg-slate-300 rounded-md">
-											<div className=" font-serif whitespace-nowrap items-center md:pl-2 flex">
+											<div className="gap-2 font-serif whitespace-nowrap items-center md:pl-2 flex w-[100%]">
 												<span>
 													{user.picture ? (
 														user.userName ? (
@@ -114,7 +114,7 @@ const  Header = () => {
 																alt="profile_picture"></img>
 														) : (
 															<img
-																className="w-[100px]"
+																className="w-[40px]"
 																src={user.picture}
 																alt="profile_picture"></img>
 														)
@@ -125,7 +125,7 @@ const  Header = () => {
 														/>
 													)}
 												</span>{" "}
-												<span>{user.given_name || user.name}</span>
+												<span className="text-[1rem]">{user.given_name || user.name}</span>
 											</div>
 
 											<ul className="dropdown">
