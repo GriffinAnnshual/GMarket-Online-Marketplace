@@ -7,7 +7,8 @@ import ProductDetails from './pages/ProductDetails'
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import Cart from './pages/Cart';
-
+import CheckoutForm from './pages/CheckoutForm';
+import CheckoutReturn from './pages/CheckoutReturn'
 function App() {
   return (
 		<Router>
@@ -41,19 +42,29 @@ function App() {
 					element={<Cart />}
 				/>
 				<Route
-				path="/email/verification"
+					path="/email/verification"
+					exact
+					element={<VerifyMail />}
+				/>
+				<Route
+					path="/payment-form"
+					exact
+					element={<CheckoutForm />}
+				/>
+				<Route
+				path="/return"
 				exact
-				element={<VerifyMail/>}
+				element={<CheckoutReturn/>}
 				/>
 			</Routes>
 			<ToastContainer
 				className="w-[60%] h-[10%] md:w-[30%] md:whitespace-nowrap md:h-[10%]"
 				autoClose={1500}
-				position='top-center'
+				position="bottom-right"
 				hideProgressBar={true}
 				newestOnTop={true}
 				theme="light"
-				/>
+			/>
 		</Router>
 	)
 }

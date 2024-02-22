@@ -26,6 +26,7 @@ const Product = (props) => {
 				quantity: 1,
 				img: img,
 				sold: sold,
+				checked: false
 			})
 		)
 		toast.success("Item added to Cart")

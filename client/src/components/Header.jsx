@@ -63,7 +63,7 @@ const  Header = () => {
 					<div className="flex gap-2 items-center">
 						<input
 							type="text"
-							className="w-60 md:w-96 md:h-10 h-8 px-5 border-2 rounded-md border-blue-600"
+							className="w-60 md:w-96 md:h-10 h-8 px-2 border-2 rounded-md border-blue-600"
 							placeholder="Search"
 						/>
 						<div>
@@ -83,14 +83,13 @@ const  Header = () => {
 					</Link>
 					<Link to="/cart">
 						<div className="text-sm md:text-lg md:pr-10 mr-3 flex rounded-md items-center gap-2 border-2 border-blue-600 px-2 py-1 pr-8">
-							{/* <div className="cart_number">{user?.cart.length}</div> */}
 							<img
 								className="w-[20px] md:w-[30px]"
 								src={cartIcon}
 								alt=""
 							/>
 
-							{!(totalQuantity === 0) && (
+							{!(totalQuantity === 0) && isAuthenticated && (
 								<div className="relative right-2 bottom-2 text-white text-sm w-[30%] h-4 flex justify-center items-center rounded-full p-1 bg-red-600">
 									{totalQuantity}
 								</div>
@@ -125,7 +124,9 @@ const  Header = () => {
 														/>
 													)}
 												</span>{" "}
-												<span className="text-[1rem]">{user.given_name || user.name}</span>
+												<span className="text-[1rem]">
+													{user.given_name || user.name}
+												</span>
 											</div>
 
 											<ul className="dropdown">

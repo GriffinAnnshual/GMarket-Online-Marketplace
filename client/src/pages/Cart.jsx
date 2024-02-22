@@ -4,20 +4,74 @@ import Product from "../components/Product"
 import product_details from "../utils/product_details"
 import {useSelector, useDispatch} from 'react-redux'
 import { actions } from "../store/modules/cart/reducers"
+import { paymentActions } from "../store/modules/payment/reducers"
 import { Link } from "react-router-dom"
+import { useState } from "react"
+import {toast} from 'react-toastify'
+
 const Cart = () => {
-    const handleDeselectAll = () => {
-        //deselects all the items in the cart
-    }
     const dispatch = useDispatch()
+	const add = useSelector((state) => state.payment.address)
+
+    const handleDeselectAll = () => {
+        dispatch(actions.deselectAll());
+    }
     const handleClearCart = () =>{
         dispatch(actions.clearCart());
     }
+	const [isChecked, setIsChecked] = useState(false)
+	const handleChecked = () => {
+		setIsChecked(!isChecked)
+	}
+	const handleCheckout = () => {
+		if(!isAuthenticated){
+			toast.warning("Please login to order items")
+			return null
+		}
+		if (!isChecked){
+			toast.warning("Please confirm the selected items")
+			return null
+		}
+		else{
+			toast.info("Redirecting to Payments...")
+			let {totalPrice, totalQuantity} = selectedInfo()
+			console.log(totalPrice, totalQuantity)
+			setTimeout(() => {
+			dispatch(paymentActions.setPaymentTotalPrice(totalPrice))
+			dispatch(
+				paymentActions.setPaymentTotalQuantity(totalQuantity)
+			)
+			dispatch(
+				paymentActions.setPaymentItemList(
+					itemList.map((items) => {
+						if (items.checked) return items
+					})
+				)
+			)
+			if (add) dispatch(paymentActions.setPaymentState("payment"))
+			else dispatch(paymentActions.setPaymentState("address"))
+			window.location.href = "/payment-form"
+			}, 2000);
+	}
+}
     const itemList = useSelector((state) => state.cart.itemList)
     const totalPrice = useSelector((state) => state.cart.totalPrice)
     const totalQuantity = useSelector((state) => state.cart.totalQuantity)
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated)
-    console.log(isAuthenticated)
+
+	const selectedInfo = () =>{
+		let totalPrice = 0
+		let totalQuantity = 0
+		itemList.map((item)=>{
+			if(item.checked){
+				totalPrice += item.price
+				totalQuantity++
+			}
+			
+		})
+		return {totalPrice,totalQuantity}
+	}
+
     return (
 			<>
 				<Header />
@@ -74,14 +128,16 @@ const Cart = () => {
 					<div className="w-[40%]">
 						<div className=" bg-slate-300 p-2 mx-2">
 							<p className=" text-xl ">
-								Subtotal ({totalQuantity} item): ${totalPrice}
+								Subtotal ({selectedInfo.totalQuantity} item): ${selectedInfo.totalPrice}
 							</p>
 							<input
 								type="checkbox"
+								checked={isChecked}
+								onChange={handleChecked}
 								name="confirm"></input>
 							<p className="inline-block px-2">I confirm the selected items</p>
 							<div className="p-4">
-								<div className="text-2xl text-center bg-yellow-300 py-2 rounded-md w-[70%] shadow-sm shadow-black cursor-pointer">
+								<div onClick={handleCheckout}  className="text-2xl text-center bg-yellow-300 py-2 rounded-md w-[70%] shadow-sm shadow-black cursor-pointer">
 									{" "}
 									Proceed to checkout
 								</div>

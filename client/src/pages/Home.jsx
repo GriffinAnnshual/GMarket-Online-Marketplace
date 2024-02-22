@@ -55,7 +55,7 @@ const Home = () => {
 				</div>
 				<div className="courses">
 					<div className="fon-bold font-montserrat text-xl pt-5">
-						<h2 className="md:px-10  px-5 md:pb-2 pb-0 md:text-[2rem]">Explore products</h2>
+						<h2 className="md:px-10  px-2 md:pb-2 pb-0 md:text-[2rem]">Explore products</h2>
 					</div>
 					<div className="">
 						<div className="course-box-area py-1 md:py-10">

@@ -41,7 +41,7 @@ function App() {
 							{messages.map((message, index) => (
 								<div
 									key={index}
-									className={`Message ${message.sender} px-5`}>
+									className={`Message ${message.sender} px-2`}>
 									{message.text}
 								</div>
 							))}
@@ -50,7 +50,7 @@ function App() {
 							<div className="p-5 flex gap-4 justify-evenly items-center">
 								<div className="font-bold text-2xl">Current bid: {newbid}$</div>
 								<input
-									className="w-[40%] border-2 border-blue-200 bg-slate-300 h-14 px-5"
+									className="w-[40%] border-2 border-blue-200 bg-slate-300 h-14 px-2"
 									type="text"
 									value={bid}
 									onChange={(e) => setbid(e.target.value)}
@@ -64,7 +64,7 @@ function App() {
 							</div>
 							<div className=" flex items-center gap-4 InputContainer text-xl font-bold">
 								<input
-									className="w-[70%] border-2 border-blue-200 bg-slate-300 h-14 px-5"
+									className="w-[70%] border-2 border-blue-200 bg-slate-300 h-14 px-2"
 									type="text"
 									value={newMessage}
 									onChange={(e) => setNewMessage(e.target.value)}

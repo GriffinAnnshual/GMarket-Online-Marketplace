@@ -22,7 +22,11 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url';
 import {dirname} from 'path'
+import Stripe from 'stripe'
 dotenv.config()
+
+
+const stripe = Stripe(process.env.VITE_STRIPE_SECRET_KEY)
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -422,6 +426,56 @@ app.post("/logout",(req, res)=>{
 		res.status(400).json({message: err.message})
 	}
 })
+
+
+//---------------------------------stripe integration routes --------------------------------------
+
+const generate_PriceID = async (itemList) => {
+	// Use Promise.all to wait for all asynchronous operations to complete
+	const updatedItemList = await Promise.all(
+		itemList.map(async (items) => {
+			if(items !== null){
+				const product = await stripe.products.create({
+				name: items.name,
+			})
+			const price = await stripe.prices.create({
+				product: product.id,
+				unit_amount: (items.price).toFixed(2) * 100,
+				currency: "INR",
+			})
+			return { price: price.id, quantity: items.quantity }
+			}
+		})
+	)
+
+	return updatedItemList
+}
+
+const DOMAIN_NAME = "http://localhost:5173"
+
+app.post("/create-checkout-session", async (req, res) => {
+	const { itemList } = req.body
+	console.log(itemList)
+
+	const items = await generate_PriceID(itemList)
+	const session = await stripe.checkout.sessions.create({
+		ui_mode: "embedded",
+		line_items: items,
+		mode: "payment",
+		return_url: `${DOMAIN_NAME}/return?session_id={CHECKOUT_SESSION_ID}`,
+	})
+	res.send({ clientSecret: session.client_secret })
+})
+
+app.get("/session-status", async (req, res) => {
+	const session = await stripe.checkout.sessions.retrieve(req.query.session_id)
+
+	res.send({
+		status: session.status,
+		customer_email: session.customer_details.email,
+	})
+})
+
 
 app.listen(3000, () => {
     console.log("Listening on http://localhost:3000");

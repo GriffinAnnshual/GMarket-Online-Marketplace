@@ -54,6 +54,19 @@ const cartSlice = createSlice({
             state.totalQuantity = 0
             state.totalPrice = 0
             state.error = null
+        },
+        updateChecked(state,action){
+            state.itemList.map((item)=>{
+                if(item.id === action.payload.id){
+                    item.checked = action.payload.checked
+                }
+            }
+            )
+        },
+        deselectAll(state){
+            state.itemList.map((item)=>{
+                item.checked = false
+            })
         }
     }
 })
