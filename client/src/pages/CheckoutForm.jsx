@@ -43,8 +43,8 @@ function CheckoutForm() {
 	}
 	const handleAddressSubmit = () => {
 		toast.success("Addressed saved successfully!")
-		dispatch(paymentActions.setPaymentState("payment"))
 	setTimeout(() => {
+		dispatch(paymentActions.setPaymentState("payment"))
 		dispatch(paymentActions.setPaymentAddress(address))
 	}, 2000);
 	}
@@ -57,7 +57,7 @@ function CheckoutForm() {
 					className="flex gap-2 z-10 w-[20%]">
 					<img
 						src={cartIcon}
-						className="md:w-[15%]"></img>
+						className="md:w-[15%] animate-spin"></img>
 					<h1 className="font-montserrat md:text-3xl font-bold text-[#37404a]">
 						G Market
 					</h1>
@@ -77,13 +77,13 @@ function CheckoutForm() {
 				{paymentState === "payment" && <SelectPayment />}
 				{paymentState !== "payment" && (
 					<div className="w-[70%] py-5 ">
-						<p className="text-orange-600 font-sans font-bold py-2 text-lg pb-4">
+						<p className="text-blue-900 font-sans font-bold py-2 text-lg pb-4">
 							1. Enter a new shipping address
 						</p>
-						<div className=" mb-10 border-blue shadow-md shadow-black border-black bg-slate-300">
+						<div className=" mb-10 border-blue rounded-md  shadow-blue-600 shadow border-2 bg-slate-300">
 							<div>
 								<div className="flex flex-col p-4 px-8">
-									<div className="text-xl font pb-10 pl-2 w-full text-center ">
+									<div className="text-xl text-blue-900 font-bold font pb-10 pl-2 w-full text-center ">
 										Add a new address
 									</div>
 									<div className="w-[90%] flex flex-col gap-4">
@@ -167,15 +167,15 @@ function CheckoutForm() {
 						</div>
 					</div>
 				)}
-				<div className="w-[40%] py-8 mx-2 md:pt-[7%] ">
-					<div className=" bg-slate-300 p-2 mx-4 shadow-md shadow-black">
+				<div className="w-[40%] py-8 mx-2 md:pt-[2%] ">
+					<div className=" bg-slate-300 p-2 mx-4 rounded-md shadow-blue-600 shadow border-2">
 						<div className="p-4">
 							{paymentState === "address" && (
-							<div
-								onClick={handleAddressSubmit}
-								className="text-xl mb-4 mx-auto text-center bg-yellow-300 py-2 rounded-md w-[70%] shadow-sm shadow-black cursor-pointer">
-									Use this address
-							</div>
+								<div
+									onClick={handleAddressSubmit}
+									className="text-xl mb-4 mx-auto text-center bg-blue-500 py-2 rounded-xl w-[100%] shadow-sm font text-white shadow-blue-600 animate-pulse drop-shadow-xl cursor-pointer">
+									Use This Address
+								</div>
 							)}
 							<span className="text-centre text-sm">
 								Choose a shipping address and payment method to calculate
@@ -184,30 +184,20 @@ function CheckoutForm() {
 						</div>
 						<hr className="w-[98%] mx-auto h-2 border-black" />
 						<p className="pl-2">Order Summary</p>
-						<div className="flex-col w-full px-5">
+						<div className="flex-col font-bold w-full px-5">
 							<div className="flex justify-between items-center pt-2">
-								<div>
-									{"Items: "}
-								</div>
-								<div>
-									{"$ " + totalPrice}
-								</div>
+								<div>{"Items: "}</div>
+								<div>{"₹ " + totalPrice}</div>
 							</div>
-							<div className='flex justify-between items-center pt-2'>
-								<div>
-									{"Delivery:"}
-								</div>
-								<div>
-									{"Free"}
-								</div>
+							<div className="flex justify-between items-center pt-2">
+								<div>{"Delivery:"}</div>
+								<div>{"Free"}</div>
 							</div>
 						</div>
-						<p className="mb-4 text-xl pt-10 pl-2 flex justify-between font-bold text-red-600 px-10">
+						<p className="mb-4 text-xl pt-10 pl-2 flex justify-between font-bold text-blue-900 px-10">
 							<span>Order Total ({totalQuantity} item) </span>
-							<span> ${totalPrice}</span>
+							<span> ₹{totalPrice}</span>
 						</p>
-						<hr className="w-[98%] mx-auto h-2 border-black" />
-					
 					</div>
 				</div>
 			</div>

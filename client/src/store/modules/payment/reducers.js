@@ -13,7 +13,7 @@ const paymentSclice = createSlice({
 		address: null,
 		paymentMethod: null,
 	},
-
+	
 	reducers: {
 		setPaymentState(state, action) {
 			state.currentState = action.payload
@@ -40,7 +40,7 @@ const paymentSclice = createSlice({
 			state.error = null
 		},
 		clearPaymentState(state) {
-			state.currentState = null
+			state.currentState = "address"
 		},
 		clearPaymentItemList(state) {
 			state.itemList = []

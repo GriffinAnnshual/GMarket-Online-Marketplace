@@ -35,7 +35,10 @@ const Cart = () => {
 		else{
 			toast.info("Redirecting to Payments...")
 			let {totalPrice, totalQuantity} = selectedInfo()
-			console.log(totalPrice, totalQuantity)
+			if(totalQuantity === 0){
+				toast.warning("Please select atleast one item!")
+				return null
+			}
 			setTimeout(() => {
 			dispatch(paymentActions.setPaymentTotalPrice(totalPrice))
 			dispatch(
@@ -96,6 +99,7 @@ const Cart = () => {
 								) : (
 									itemList.map((item) => (
 										<CartItems
+											type = "cart"
 											key={item.id}
 											itemDetails={item}
 										/>
@@ -114,21 +118,22 @@ const Cart = () => {
 							{itemList.length !== 0 ? (
 								<div
 									onClick={handleClearCart}
-									className="py-1 text-center cursor-pointer w-[12%] bg-yellow-300 ml-2 whitespace-nowrap rounded-md shadow-sm shadow-black">
+									className="py-1 text-center cursor-pointer w-[20%] bg-blue-600 rounded-xl shadow-sm shadow-blue-600 text-white border-2 border-black ml-2 whitespace-nowrap">
 									Clear Cart
 								</div>
 							) : (
 								""
 							)}
 							<p className="text-right p-4">
-								Sub total:({totalQuantity} item): ${totalPrice}
+								Sub total:({totalQuantity} item): ₹{totalPrice}
 							</p>
 						</div>
 					</div>
 					<div className="w-[40%]">
 						<div className=" bg-slate-300 p-2 mx-2">
 							<p className=" text-xl ">
-								Subtotal ({selectedInfo.totalQuantity} item): ${selectedInfo.totalPrice}
+								Subtotal ({selectedInfo().totalQuantity} item): ₹
+								{selectedInfo().totalPrice}
 							</p>
 							<input
 								type="checkbox"
@@ -137,7 +142,9 @@ const Cart = () => {
 								name="confirm"></input>
 							<p className="inline-block px-2">I confirm the selected items</p>
 							<div className="p-4">
-								<div onClick={handleCheckout}  className="text-2xl text-center bg-yellow-300 py-2 rounded-md w-[70%] shadow-sm shadow-black cursor-pointer">
+								<div
+									onClick={handleCheckout}
+									className="text-2xl text-center bg-blue-600 py-2 rounded-xl w-[100%] shadow-sm shadow-blue-600 text-white border-2 border-black cursor-pointer">
 									{" "}
 									Proceed to checkout
 								</div>

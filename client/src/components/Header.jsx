@@ -45,7 +45,7 @@ const  Header = () => {
 				<div className=" items-center pb-2 justify-center flex flex-row gap-4 pt-5">
 					<img
 						src={cartIcon}
-						className="md:w-[6%]"></img>
+						className="md:w-[6%] animate-spin"></img>
 					<Link to="/">
 						<h1 className="font-montserrat md:text-3xl font-bold text-[#37404a]">
 							G Market

@@ -42,7 +42,7 @@ function SelectPayment() {
 
 	return (
 		<div className="w-[70%]">
-			<div className="flex w-full justify-between items-center border-black border-2 py-5 my-5">
+			<div className="rounded-md shadow-black shadow-md flex w-full justify-between items-cente border-2 py-5 my-5">
 				<div className="w-[35%] text-center">
 					<p className="font-sans font-bold py-2">1. Delivery Address</p>
 				</div>
@@ -55,7 +55,7 @@ function SelectPayment() {
 					Change
 				</div>
 			</div>
-			<div className=" border-black border-2">
+			<div className="rounded-md shadow-black shadow-md border-2">
 				<div>
 					<div className="flex flex-col p-4 px-8">
 						<div className="text-xl font-bold pb-4 pl-2">

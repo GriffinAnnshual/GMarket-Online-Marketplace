@@ -48,13 +48,13 @@ function App() {
 						</div>
 						<div className="border-t-2 border-black">
 							<div className="p-5 flex gap-4 justify-evenly items-center">
-								<div className="font-bold text-2xl">Current bid: {newbid}$</div>
+								<div className="font-bold text-2xl">Current bid: {newbid}₹</div>
 								<input
 									className="w-[40%] border-2 border-blue-200 bg-slate-300 h-14 px-2"
 									type="text"
 									value={bid}
 									onChange={(e) => setbid(e.target.value)}
-									placeholder="Enter bid value in $"
+									placeholder="Enter bid value in ₹"
 								/>
 								<button
 									className=" text-2xl h-[15%] w-[30%] bg-blue-400"
