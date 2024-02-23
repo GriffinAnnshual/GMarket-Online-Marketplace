@@ -15,7 +15,6 @@ function CheckoutReturn() {
   const dispatch = useDispatch()
   const itemList = useSelector((state)=> state.payment.itemList)
   const totalPrice = useSelector((state)=> state.payment.totalPrice)
-  console.log(itemList)
     const [status, setStatus] = useState(null)
     const [customerEmail, setCustomerEmail] = useState("")
     useEffect(() => {
@@ -45,10 +44,10 @@ function CheckoutReturn() {
   }
 
   if (status === 'complete') {
-	dispatch(paymentActions.clearPaymentItemList())
-	dispatch(paymentActions.clearPaymentTotalPrice())
-	dispatch(paymentActions.clearPaymentState())
-	dispatch(paymentActions.clearPaymentTotalQuantity())
+	// dispatch(paymentActions.clearPaymentItemList())
+	// dispatch(paymentActions.clearPaymentTotalPrice())
+	// dispatch(paymentActions.clearPaymentState())
+	// dispatch(paymentActions.clearPaymentTotalQuantity())
 	
     return (
 			<section id="success">

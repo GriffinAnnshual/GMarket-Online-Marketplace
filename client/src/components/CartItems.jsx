@@ -40,13 +40,15 @@ const CartItems = (props) => {
 		<>
 			<div className="flex justify-evenly gap-2 w-[100%] p-2 border-2 shadow-md shadow-gray-600">
 				<div className="flex gap-4 items-center justify-center p-2">
-					{type === "cart" && (<div>
-						<input
-							type="checkbox"
-							checked={checked}
-							onChange={handleChecked}
-							name="selector"></input>
-					</div>)}
+					{type === "cart" && (
+						<div>
+							<input
+								type="checkbox"
+								checked={checked}
+								onChange={handleChecked}
+								name="selector"></input>
+						</div>
+					)}
 					<div className="p-0">
 						<img
 							src={img}
@@ -55,8 +57,13 @@ const CartItems = (props) => {
 					<div className="flex flex-col w-[60%]">
 						<p className="text-lg">{name}</p>
 						<p>Seller: {seller}</p>
-						<p className="text-green-700">{!sold && "In Stock"}</p>
-						<p className="text-red-500">{sold && "Out of stock"}</p>
+						{type === "cart" && (
+							<div>
+								{" "}
+								<p className="text-green-700">{!sold && "In Stock"}</p>
+								<p className="text-red-500">{sold && "Out of stock"}</p>
+							</div>
+						)}
 					</div>
 				</div>
 				<div className="text-center">
