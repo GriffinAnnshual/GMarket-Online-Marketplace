@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 
 
 const productsSchema = new Schema({
-    product_id : mongoose.Schema.Types.ObjectId,
     name : {
         type : String,
         required : true
@@ -21,7 +20,7 @@ const productsSchema = new Schema({
         type : String,
         required : true
     },
-    sellerID : {
+    seller_id : {
         type : mongoose.Schema.Types.ObjectId,
         ref: 'Seller',
         required : true

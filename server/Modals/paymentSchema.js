@@ -5,7 +5,7 @@ const Schema = mongoose.Schema
 const paymentsSchema = new Schema({
 	order_id: {
 		type: mongoose.Schema.Types.ObjectId,
-		refs: "Order",
+		ref: "Order",
 		required: true,
 	},
 	amount: {

@@ -18,6 +18,8 @@ const isAuthenticated = async (req, res, next) => {
 
 			if (response.data) {
 				req.user = await response.data
+				req.user.user_id = req.session.user_id
+				console.log(req.user)
 				next()
 			} else {
 				res.status(401).json({ exists: false, message: "Unauthorized" })
@@ -28,6 +30,8 @@ const isAuthenticated = async (req, res, next) => {
 		}
 	}
 	else if(req.session.access_token) {
+		const user_id = req.session.user_id
+		console.log(user_id + " authenticated")
 		const token = req.session.access_token;
 		jwt.verify(token, "secretKey", function(err){
 			if(err){
@@ -36,7 +40,7 @@ const isAuthenticated = async (req, res, next) => {
 			else{
 				console.log("session token verified found!")
 				req.user = jwt.decode(token)
-				console.log(req.user)
+				req.user.user_id = user_id
 				next()
 			}
 		})
@@ -44,7 +48,7 @@ const isAuthenticated = async (req, res, next) => {
 	else if (req.session.user){
 		console.log("twitter user found!")
 		const {userName, userToken, name, picture}= req.session.user
-		req.user = {userName: userName, name: name, token: userToken, picture: picture}
+		req.user = {userName: userName, name: name, token: userToken, picture: picture, user_id: req.session.user_id}
 		next()
 	}
 	else {

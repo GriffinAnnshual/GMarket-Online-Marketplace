@@ -23,6 +23,8 @@ import path from 'path'
 import { fileURLToPath } from 'url';
 import {dirname} from 'path'
 import Stripe from 'stripe'
+import Order from './Modals/ordersSchema.js'
+import Payment from './Modals/paymentSchema.js'
 dotenv.config()
 
 
@@ -144,24 +146,27 @@ app.get(
 )
 
 
-app.get("/oauth2/redirect/google", function (req, res, next) {
-	passport.authenticate("google", function (err, user, accessToken) {
+app.get("/oauth2/redirect/google", async function (req, res, next) {
+	await passport.authenticate("google", async function (err, user, accessToken) {
 		if (err) {
 			return next(err)
 		}
 		if (!user) {
 			return res.redirect("/login")
 		}
-
-		req.logIn(user, (loginErr) => {
+		req.logIn(user, async(loginErr) => {
 			if (loginErr) {
 				return next(loginErr)
 			}
+			const currectUser = await User.findOne({ email: user.email, loginType: "google" })
+			const user_id = currectUser._id
+			req.session.user_id = user_id
             req.session.accessToken = accessToken
             res.redirect("http://localhost:5173/")
 		})
 	})(req, res, next)
 })
+
 
 app.get("/auth/twitter",(req,res)=>{
     tw.login((err,tokenSecret,url)=>{
@@ -236,6 +241,9 @@ app.get("/auth/twitter/callback", async(req,res)=>{
 
 					await newUser.save()
 				}
+				const currentUser = await User.findOne({username: user.userName, loginType: "twitter"})
+				const user_id = currentUser._id
+				req.session.user_id = user_id
 				res.redirect("http://localhost:5173/")
 			}
 		)
@@ -260,6 +268,9 @@ app.post("/login", async(req,res)=>{
         return res.status(401).json({ exists: false, message: 'Incorrect password' });
     }
     else{
+		const currentUser = await User.findOne({ email: email, loginType: "username" })
+		const user_id = currentUser._id
+		req.session.user_id = user_id
         jwt.sign(
 			{ email: email, name: user.name },
 			"secretKey",
@@ -305,6 +316,12 @@ try{
                 loginType: "username",
             })
             await newUser.save()
+		const currentUser = await User.findOne({
+			email: email,
+			loginType: "username",
+		})
+		const user_id = currentUser._id
+		req.session.user_id = user_id
             jwt.sign(
                 { email: email, name: username, password: hashPassword },
                 "secretKey",
@@ -477,8 +494,23 @@ app.get("/session-status", async (req, res) => {
 })
 
 
-//--------------------------------------------------------------------------------------------------------
+//-----------------------------------------------order-routes------------------------------------------
 
+app.post("/add/orders",(req, res) => {
+	const { itemList, totalPrice, totalQuantity, address } = req.body
+
+})
+
+
+//-----------------------------------------------payments-routes----------------------------------------
+
+app.get("/add/payments",(req, res) => {
+
+})
+
+
+app.post("/add/address",(req,res)=>{
+})
 
 
 app.listen(3000, () => {

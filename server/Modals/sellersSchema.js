@@ -3,7 +3,6 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema
 
 const sellersSchema = new Schema({
-    seller_id: mongoose.Schema.Types.ObjectId,
     name: {
         type: String,
         required: true
@@ -28,7 +27,7 @@ const sellersSchema = new Schema({
         {
             user_id: {
                 type: mongoose.Schema.Types.ObjectId,
-                ref: 'users',
+                ref: 'User',
                 required: true
             },
             review: {
