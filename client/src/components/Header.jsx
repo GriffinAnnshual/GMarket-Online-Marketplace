@@ -8,6 +8,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import {toast} from 'react-toastify'
 import {useSelector, useDispatch} from 'react-redux'
 import { logout } from "../store/modules/auth/actions"
+import plus from '../assets/images/plus.png'
 
 const  Header = () => {
 
@@ -53,8 +54,8 @@ const  Header = () => {
 					</Link>
 				</div>
 			</div>
-			<div className="flex gap-[15%] md:gap-[9%] md:flex-row flex-col items-center p-[1%] md:pr-[1%]">
-				<div className="p-2 flex max-w-full mx-auto px-0 md:px-2 gap-2 md:gap-[5%] items-center md:w-[50%]">
+			<div className="flex gap-[15%] md:gap-[4%] md:flex-row flex-col items-center p-[1%] md:pr-[1%]">
+				<div className="p-2 flex max-w-full mx-auto md:mx-0 px-0 md:px-2 gap-2 md:gap-[5%] items-center md:w-[50%]">
 					<Link to="/">
 						<div className=" md:text-xl nav-box nav-left-box nav-box1 ">
 							<h3>Marketplace</h3>
@@ -97,23 +98,23 @@ const  Header = () => {
 							<p>cart</p>
 						</div>
 					</Link>
-					<div className="md:p-2  p-0 text-sm md:text-lg md:w-[150%] w-[250%]">
+					<div className="md:p-2   p-0 text-sm md:text-lg">
 						{isAuthenticated ? (
-							<div className="text-sm md:text-lg drop-down ">
+							<div className="text-sm drop-down ">
 								<div className="primary-navigation">
 									<ul>
 										<li className="bg-slate-300 rounded-md">
-											<div className="gap-2 font-serif whitespace-nowrap items-center md:pl-2 flex w-[100%]">
+											<div className="gap-2 font-serif  items-center md:pl-2 flex w-[100%]">
 												<span>
 													{user.picture ? (
 														user.userName ? (
 															<img
-																className="md:w-[170px]"
+																className="md:w-max"
 																src={user.picture}
 																alt="profile_picture"></img>
 														) : (
 															<img
-																className="w-[40px]"
+																className="w-[60px] rounded-full"
 																src={user.picture}
 																alt="profile_picture"></img>
 														)
@@ -129,15 +130,27 @@ const  Header = () => {
 												</span>
 											</div>
 
-											<ul className="dropdown">
+											<ul className="dropdown text-lg px-10">
 												<li>
-													<a href="#">Dashboard</a>
+													<a
+														href="/dashboard/editProfile"
+														className="ml-5">
+														Dashboard
+													</a>
 												</li>
 												<li>
-													<a href="#">Orders</a>
+													<a
+														href="#"
+														className="ml-5">
+														Orders
+													</a>
 												</li>
 												<li>
-													<Link onClick={handleLogout}>Logout</Link>
+													<Link
+														className="ml-5"
+														onClick={handleLogout}>
+														Logout
+													</Link>
 												</li>
 											</ul>
 										</li>
@@ -151,6 +164,24 @@ const  Header = () => {
 								</div>
 							</Link>
 						)}
+					</div>
+					<div>
+						<a
+							href="#_"
+							className="relative inline-flex items-center justify-center px-10 py-[5px] overflow-hidden font-medium text-blue-700
+							 transition duration-300 ease-out border-2 border-blue-700 rounded-md shadow-md group">
+							<span className="absolute inset-0 flex items-center justify-center w-full h-full text-white duration-300 -translate-x-full bg-blue-700 group-hover:translate-x-0 ease">
+								<img
+									className="w-6 h-6"
+									src={plus}
+									alt=""
+								/>
+							</span>
+							<span className="absolute flex items-center justify-center w-full h-full text-blue-700 transition-all duration-300 transform group-hover:translate-x-full ease">
+								Sell
+							</span>
+							<span className="relative invisible">Sell</span>
+						</a>
 					</div>
 				</div>
 			</div>

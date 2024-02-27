@@ -9,6 +9,8 @@ import "react-toastify/dist/ReactToastify.css"
 import Cart from './pages/Cart';
 import CheckoutForm from './pages/CheckoutForm';
 import CheckoutReturn from './pages/CheckoutReturn'
+import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
 function App() {
   return (
 		<Router>
@@ -17,19 +19,16 @@ function App() {
 					exact
 					path="/"
 					element={<Home />}>
-					{" "}
 				</Route>
 				<Route
 					exact
 					path="/signup"
 					element={<Signup />}>
-					{" "}
 				</Route>
 				<Route
 					exact
 					path="/login"
 					element={<Login />}>
-					{" "}
 				</Route>
 				<Route
 					exact
@@ -52,9 +51,24 @@ function App() {
 					element={<CheckoutForm />}
 				/>
 				<Route
-				path="/return"
-				exact
-				element={<CheckoutReturn/>}
+					path="/return"
+					exact
+					element={<CheckoutReturn />}
+				/>
+				<Route
+					path="/dashboard/editProfile"	
+					exact
+					element={<Dashboard page="edit" />}
+				/>
+				<Route
+					path="/profile"
+					exact
+					element={<Profile />}
+				/>
+				<Route
+					path="/dashboard/profile-picture"
+					exact
+					element={<Dashboard page="profile" />}
 				/>
 			</Routes>
 			<ToastContainer

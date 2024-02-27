@@ -273,7 +273,6 @@ nav{
     }
  
     }
-
  ul li ul li a { transition: all 0.5s ease; }
     margin: 0 auto;
     display: block;
@@ -318,6 +317,9 @@ nav{
       padding-top: 20px;
 
       background: white;
+	  border-width: 4px;
+	  border-color: lightseagreen;
+	  border-radius: 10px;
     }
 
     ul li:hover > ul,
