@@ -23,7 +23,7 @@ function CheckoutReturn() {
         const sessionId = urlParams.get("session_id")
         const getCustomer = async () => {
         await axios
-        .get(`http://localhost:3000/session-status?session_id=${sessionId}`)
+        .get(`/api/v1/payment/session-status?session_id=${sessionId}`)
         .then((res) => {
             setStatus(res.data.status)
             setCustomerEmail(res.data.customer_email)

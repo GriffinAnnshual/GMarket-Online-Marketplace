@@ -19,7 +19,7 @@ const  Header = () => {
 	const handleLogout = async () => {
 		try {
 			await axios.post(
-				"http://localhost:3000/logout",
+				"/api/v1/user/logout",
 				{},
 				{
 					withCredentials: true,
@@ -106,18 +106,13 @@ const  Header = () => {
 										<li className="bg-slate-300 rounded-md">
 											<div className="gap-2 font-serif  items-center md:pl-2 flex w-[100%]">
 												<span>
-													{user.picture ? (
-														user.userName ? (
+													{(user.picture || user.userName) ? (
+														
 															<img
 																className="md:w-max"
 																src={user.picture}
 																alt="profile_picture"></img>
-														) : (
-															<img
-																className="w-[60px] rounded-full"
-																src={user.picture}
-																alt="profile_picture"></img>
-														)
+														
 													) : (
 														<FaRegUserCircle
 															className="h-4 md:h-8"

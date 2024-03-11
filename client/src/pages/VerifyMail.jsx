@@ -17,7 +17,7 @@ const VerifyMail = () => {
 
     const handleVerification = () =>{
 	axios
-		.get(`http://localhost:3000/verify/email?verify=${otp}`, {
+		.get(`/api/v1/mail/verify/email?verify=${otp}`, {
 			withCredentials: true,
 		})
 		.then(() => {

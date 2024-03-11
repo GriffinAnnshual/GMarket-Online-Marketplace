@@ -7,7 +7,7 @@ import rootReducer from "./modules/index.js"
 const persistConfig = {
 	key: "root",
 	storage,
-	blacklist: ["navigation"],
+	// whitelist: ["cart", "auth"] // only there slices will be persisted
 }
 
 const rootPersistReducer = persistReducer(persistConfig, rootReducer)

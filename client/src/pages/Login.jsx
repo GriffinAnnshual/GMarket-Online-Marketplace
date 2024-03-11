@@ -15,7 +15,7 @@ const Login = () => {
 	const handleLogin = async (e) => {
 		e.preventDefault()
 
-		await axios.post("http://localhost:3000/login",{email: email, password: password},{
+		await axios.post("/api/v1/user/login",{email: email, password: password},{
 			withCredentials: true,
 			headers: {
 				"Content-Type": "application/json",
@@ -35,13 +35,13 @@ const Login = () => {
 
 	const handleGoogle = () => {
 		toast.info("Redirecting to Google")
-		window.open("http://localhost:3000/auth/google", "_self");
+		window.open("http://localhost:3000/api/v1/auth/google", "_self");
 
 	}
 
 	const handleTwitter = async() =>{
 		toast.info("Redirecting to Twitter")
-		window.open("http://localhost:3000/auth/twitter", "_parent")
+		window.open("http://localhost:3000/api/v1/auth/twitter", "_parent")
 	}
 
 	return (

@@ -29,9 +29,14 @@ function SelectPayment() {
 	useEffect(() => {
 		const getClientSecret = async () => {
 			const response = await axios.post(
-				`http://localhost:3000/create-checkout-session`,
+				`/api/v1/payment/create-checkout-session`,
 				{
 					itemList: itemList,
+				},{
+					withCredentials: true,
+					headers: {
+						"Content-Type": "application/json",
+					}
 				}
 			)
 			setClientSecret(response.data.clientSecret)
@@ -39,7 +44,7 @@ function SelectPayment() {
 		}
 		getClientSecret()
 	}, [clientSecret, itemList])
-
+	console.log(clientSecret)
 	return (
 		<div className="w-[70%]">
 			<div className="border-gray-500 rounded-md shadow-black shadow-md flex w-full justify-between items-cente border-2 py-5 my-5">

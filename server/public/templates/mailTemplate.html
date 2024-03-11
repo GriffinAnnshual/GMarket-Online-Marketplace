@@ -2,7 +2,7 @@
 <p style="color:black;">Dear {{customer_name}},</p>
 <p style="text-align:justify; color:black;">Welcome to GMarket, your go-to destination for a seamless online shopping experience!</p>
 <p style="text-align:justify; color:black;">Here is your One-Time Password (OTP): <b>{{otp_code}}</b></p>
-<a href="http://localhost:3000/verify/email?verify={{otp_code}}&email={{to_mail}}">
+<a href="http://localhost:3000/api/v1/mail/verify/email?verify={{otp_code}}&email={{to_mail}}">
     <button style="padding:10px;border-radius:10%;background-color:skyblue;white-space:nowrap;color:black;font-weight:bold;">
         <b>Verify now</b>
     </button>

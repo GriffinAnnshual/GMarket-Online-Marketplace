@@ -49,7 +49,7 @@ const Signup = () => {
 			saveFormData();
 		
 			axios.post(
-						"http://localhost:3000/send-otp",
+						"/api/v1/mail/send-otp",
 						{
 							email: formData.email,
 							name: formData.Name,
@@ -82,7 +82,7 @@ const Signup = () => {
 			toast.warning("Verify email to continue")
 			return null
 		}
-		await axios.post('http://localhost:3000/register',{email: formData.email,password: formData.password,username: formData.Name},{
+		await axios.post('/api/v1/user/register',{email: formData.email,password: formData.password,username: formData.Name},{
 			withCredentials: true,
 			headers: {
 				"Content-Type": "application/json",
@@ -106,11 +106,11 @@ const Signup = () => {
 
 	const handleGoogle = async () => {
 		toast.info("Redirecting to Google")
-		window.open("http://localhost:3000/auth/google", "_self")
+		window.open("/api/v1/auth/google", "_self")
 	}
 	const handleTwitter = async () => {
 		toast.info("Redirecting to Twitter")
-		window.open("http://localhost:3000/auth/twitter", "_self")
+		window.open("/api/v1/auth/twitter", "_self")
 	}
 	
 	return (

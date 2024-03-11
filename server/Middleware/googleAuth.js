@@ -18,31 +18,31 @@ db.on("connected", () => console.log("MongoDB is connected"))
 passport.use(
 	new GoogleStrategy.Strategy(
 		{
-			clientID: process.env.VITE_APP_CLIENT_ID,
-			clientSecret: process.env.VITE_APP_CLIENT_SECRET,
-			callbackURL: "/oauth2/redirect/google",
+			clientID: process.env.GOOGLE_CLIENT_ID,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+			callbackURL: "http://localhost:3000/api/v1/auth/oauth2/redirect/google",
 			passReqToCallback: true,
 		},
-		function (request, accessToken, refreshToken, profile, cb) {	
-						User.updateOne(
-							{	google_UserID: profile.id},
-							{
-								google_UserID: profile.id,
-								email: profile.email,
-								name: profile.displayName,
-								profilePic: profile.picture,
-								loginType: "google"
-							},
-							{ upsert: true }
-						)
-							.then(() => {
-								console.log("profile inserted or found")
-								return cb(null, profile, accessToken)
-							})
-							.catch((err) => {
-								console.log(err)
-								return cb(err)
-							})
+		function (request, accessToken, refreshToken, profile, cb) {
+			User.updateOne(
+				{ google_UserID: profile.id },
+				{
+					google_UserID: profile.id,
+					email: profile.email,
+					name: profile.displayName,
+					profilePic: profile.picture,
+					loginType: "google",
+				},
+				{ upsert: true }
+			)
+				.then(() => {
+					console.log("profile inserted or found")
+					return cb(null, profile, accessToken)
+				})
+				.catch((err) => {
+					console.log(err)
+					return cb(err)
+				})
 		}
 	)
 )
