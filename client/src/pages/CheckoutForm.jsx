@@ -65,7 +65,7 @@ function CheckoutForm() {
 				<div className="w-full text-center absolute text-2xl pr-4">
 					Checkout
 				</div>
-				<div className="w-screen left-[90%] absolute text-2xl pr-4">
+				<div className="w-fit left-[90%] absolute text-2xl pr-4">
 					<img
 						className="w-4"
 						src="https://m.media-amazon.com/images/G/31/x-locale/checkout/truespc/secured-ssl._CB485936980_.png"
