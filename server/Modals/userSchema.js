@@ -8,6 +8,10 @@ const userSchema = new Schema({
 			return this.loginType === "google"
 		},
 	},
+	description: {
+		type: String,
+		required: false
+	},
 	email: {
 		type: String,
 		required: function () {

@@ -1,10 +1,15 @@
 import nodemailer from "nodemailer"
 import fs from "fs"
+import bcrypt from "bcryptjs"
 import path from "path"
 import { fileURLToPath } from "url"
 import { dirname } from "path"
 import otpGenerator from "otp-generator"
-import { Redisclient } from "../server.js"
+import {connectRedis} from '../data/redis.js'
+import User from '../Modals/userSchema.js'
+
+
+const Redisclient = await connectRedis()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -47,7 +52,7 @@ export const sentOTP =  async (req, res) => {
 
 		const getHTMLTemplate = (templateName, params) => {
 			const templatePath = path.join(
-				__dirname,
+				process.cwd(),
 				"public",
 				"templates",
 				`${templateName}.html`

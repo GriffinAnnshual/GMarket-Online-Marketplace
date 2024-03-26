@@ -7,8 +7,16 @@ import axios from 'axios'
 import {toast} from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import cartIcon from "../assets/images/shopping-cart.png"
+import { useNavigate } from "react-router-dom"
+import Cookies from "universal-cookie"
+
 
 const Login = () => {
+	const cookie = new Cookies(null, {
+		path: "/",
+		maxAge: 24 * 60 * 60, 
+	})
+	const navigate = useNavigate()
 	const [email, setEmail] = useState("")
 	const [password, setPassword] = useState("")
 
@@ -20,10 +28,13 @@ const Login = () => {
 			headers: {
 				"Content-Type": "application/json",
 			}
-		}).then(()=>{
+		}).then((res)=>{
+			const token = res.data.token
+			cookie.set('gmarket_user_token', token)
+			cookie.set('loginType','jwt')
 			toast.success("Login successful")
 			setInterval(()=>{
-				window.location.href = "/"
+				navigate("/")
 			},1000)
 		})
 		.catch((err)=>{
@@ -33,15 +44,14 @@ const Login = () => {
 		})
 	}	
 
-	const handleGoogle = () => {
+	const handleGoogle = async() => {
 		toast.info("Redirecting to Google")
-		window.open("http://localhost:3000/api/v1/auth/google", "_self");
-
+		window.open("http://localhost:3000/api/v1/auth/google", "_self")
 	}
 
 	const handleTwitter = async() =>{
-		toast.info("Redirecting to Twitter")
-		window.open("http://localhost:3000/api/v1/auth/twitter", "_parent")
+			toast.info("Redirecting to Twitter")
+			window.open("http://localhost:3000/api/v1/auth/twitter", "_self" )
 	}
 
 	return (

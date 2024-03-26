@@ -6,8 +6,8 @@ const router = express.Router()
 
 
 
-router.post("/sent-otp", isAuthenticated, sentOTP)
-router.route("/verify/email").get(isAuthenticated, verifyEmail)
+router.post("/send-otp", sentOTP)
+router.route("/verify/email").get(verifyEmail)
 
 
 export default router

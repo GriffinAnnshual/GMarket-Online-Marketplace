@@ -14,7 +14,7 @@ function Dashboard(props) {
 			<div className="flex">
 				<Sidebar />
 				{page == "edit" && <EditProfile />}
-        {page === "profile" && <ViewProfile/>}
+				{page === "profile" && <ViewProfile/>}
 			</div>
       <Footer/>
 		</div>

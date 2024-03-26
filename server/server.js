@@ -1,21 +1,21 @@
 
 import {connectMongoDB} from './data/database.js'
-import {connectRedis} from './data/redis.js'
-
-// import cloudinary from 'cloudinary'
+import cloudinary from 'cloudinary'
 import {app} from './app.js'
 
-const PORT = process.env.PORT || 4000
-
-
-
-
-const Redisclient = connectRedis();
-connectMongoDB();
-
-app.listen(PORT, () => {
-	console.log(`Server is running at http://localhost:${PORT}`)
+cloudinary.config({
+	cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+	api_key: process.env.CLOUDINARY_API_KEY,
+	api_secret: process.env.CLOUDINARY_API_SECRET,
 })
 
+const PORT = process.env.PORT || 4000
+connectMongoDB()
 
-export { Redisclient }
+
+
+app.listen(PORT, () => {
+	console.log(`Server is running at PORT: ${PORT}`)
+})
+
+export {cloudinary}

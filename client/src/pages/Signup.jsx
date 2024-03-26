@@ -11,9 +11,16 @@ import 	check from "../assets/images/check.png"
 import warning from '../assets/images/warning.png'
 import {useSelector} from 'react-redux'
 import cartIcon from "../assets/images/shopping-cart.png"
+import { useNavigate } from "react-router-dom"
+import Cookies from "universal-cookie"
 
 
 const Signup = () => {
+	const navigate = useNavigate()
+	const cookie = new Cookies(null, {
+		path: "/",
+		maxAge: 24 * 60 * 60,
+	})
 	const emailVerified = useSelector((state) => state.auth.emailVerified)
 
 	const [formData, setFormData] = useState({
@@ -81,7 +88,7 @@ const Signup = () => {
 		if (!emailVerified) {
 			toast.warning("Verify email to continue")
 			return null
-		}
+		}``
 		await axios.post('/api/v1/user/register',{email: formData.email,password: formData.password,username: formData.Name},{
 			withCredentials: true,
 			headers: {
@@ -90,10 +97,13 @@ const Signup = () => {
 		})
 		.then(()=>{
 			toast.success("Account Created Successfully")
-			setInterval(()=>{
+			setTimeout((res)=>{
+				const token = res.data.token
+				cookie.set('gmarket_user_token', token)
+				cookie.set('loginType', 'jwt')
 				localStorage.clear()
 				sessionStorage.clear()
-				window.location.href = "/"
+				navigate("/")
 			},1000)
 		})
 		.catch((err)=>{
@@ -106,11 +116,26 @@ const Signup = () => {
 
 	const handleGoogle = async () => {
 		toast.info("Redirecting to Google")
-		window.open("/api/v1/auth/google", "_self")
+		await axios.get("http://localhost:3000/api/v1/auth/google").then((res) => {
+			const token = res.data.token
+			cookie.set("gmarket_user_token", token)
+			cookie.set("loginType", "google")
+			navigate("/")
+		})
 	}
 	const handleTwitter = async () => {
-		toast.info("Redirecting to Twitter")
-		window.open("/api/v1/auth/twitter", "_self")
+	toast.info("Redirecting to Twitter")
+	await axios
+		.get("http://localhost:3000/api/v1/auth/twitter")
+		.then((res) => {
+			const token = {
+				userToken: res.data.userToken,
+				userTokenSecret: res.data.userTokenSecret,
+			}
+			cookie.set("gmarket_user_token", token)
+			cookie.set("loginType", "twitter")
+			navigate("/")
+		})
 	}
 	
 	return (

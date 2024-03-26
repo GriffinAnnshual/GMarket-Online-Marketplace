@@ -27,7 +27,6 @@ export const loginUser = async (req, res) => {
 				email: email,
 				loginType: "username",
 			})
-			console.log(currentUser)
 			req.session.user_id = currentUser._id
 			jwt.sign(
 				{ email: email, name: user.name },
@@ -37,8 +36,6 @@ export const loginUser = async (req, res) => {
 					if (err) {
 						console.log("jwt signin failed")
 					}
-					console.log(token)
-					req.session.access_token = token
 					res.status(200).json({ success: true, token: token })
 				}
 			)
@@ -88,7 +85,6 @@ export const registerUser =  async (req, res) => {
 					if (err) {
 						console.log("jwt signin failed")
 					}
-					req.session.access_token = token
 					res.status(200).json({ success: true, token: token })
 				}
 			)
@@ -113,5 +109,49 @@ export const logoutUser = (req, res) => {
 export const getUser =  (req, res) => {
 	res.status(200).json(req.user)
 }
+
+
+export const getDetails = async(req, res) => {
+	try{
+		const user_id = req.params.user_id
+		const userDetails = await User.find({_id: user_id })
+		console.log(userDetails)
+		res.status(200).json({'status': 'ok', 'userDetails': userDetails[0]})
+	}catch(err){
+		console.log("Error occurred:", err)
+		res.status(400).json({'status': 'error', 'error': err})
+	}
+}
+
+export const updateDetails =  async(req,res) =>{
+	try{
+		let changes = {};
+		console.log(req.body)
+		const details = req.body.details;
+		for (let key in details){
+			if (details[`${key}`]){
+				changes[`${key}`] = details[`${key}`]
+			}
+		}
+		const user_id = req.params.user_id
+		await User.updateOne({_id: user_id},changes)
+		.then(()=>{
+			res.status(200).json({success: true, message: 'Updated successfully'})
+		})
+		.catch(err => {
+			res.status(400).json({success: false, message: err.message})
+		})
+
+	}catch(err){
+		console.log(err)
+		res.status(400).json({success: false, message: err.message})
+	}
+
+}
+
+export const uploadAvatar = (req, res) => {
+
+}
+
 
 export const addAddress =  (req, res) => {}

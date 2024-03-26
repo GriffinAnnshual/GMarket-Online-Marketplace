@@ -4,8 +4,9 @@ import OAuth from "oauth-1.0a"
 import passport from "../middleware/googleAuth.js"
 import crypto from "crypto"
 import User from "../Modals/userSchema.js"
-
+import Cookies from 'universal-cookie'
 import axios from 'axios'
+
 
 const oauth = OAuth({
 	consumer: {
@@ -28,6 +29,8 @@ const tw = new LoginWithTwitter({
 
 
 export const redirectGoogle = async(req, res, next) => {
+	const cookies = new Cookies(req.headers.cookie, { path: "/" })
+	console.log(cookies)
 	await passport.authenticate(
 		"google",
 		async function (err, user, accessToken) {
@@ -47,7 +50,8 @@ export const redirectGoogle = async(req, res, next) => {
 				})
 				const user_id = currectUser._id
 				req.session.user_id = user_id
-				req.session.accessToken = accessToken
+				res.cookie("gmarket_user_token", accessToken, { path: "/" })
+				res.cookie("loginType", "google", { path: "/" })
 				res.redirect("http://localhost:5173/")
 			})
 		}
@@ -67,6 +71,7 @@ export const authTwitter =  (req, res) => {
 }
 
 export const authTwitterCallback =  async (req, res) => {
+	const cookies = new Cookies(req.headers.cookie, { path: "/" })
 	try {
 		tw.callback(
 			{
@@ -83,7 +88,8 @@ export const authTwitterCallback =  async (req, res) => {
 				delete req.session.tokenSecret
 
 				const { userToken, userTokenSecret } = user
-
+				res.cookie("gmarket_user_token", {userToken, userTokenSecret}, { path: "/" })
+				res.cookie("loginType", "twitter", { path: "/" })
 				const request_data = {
 					url: "https://api.twitter.com/1.1/account/verify_credentials.json?include_email=true",
 					method: "GET",

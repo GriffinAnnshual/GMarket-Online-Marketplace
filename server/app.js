@@ -16,13 +16,6 @@ config({
 })
 
 
-const allowedOrigins = [
-	"http://localhost:3000",
-	"http://localhost:5173",
-	"https://accounts.google.com",
-	"https://api.twitter.com/",
-]
-
 const app = express()
 // Cookie parser help to access the cookie values of the browser inside a server.
 app.use(cookieParser())
@@ -30,21 +23,7 @@ app.use(express.json())
 // Body parser help to access the body values of the browser inside a server.
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-app.use(
-	cors({
-		origin: function (origin, callback) {
-			if (!origin) return callback(null, true)
-			if (allowedOrigins.indexOf(origin) === -1) {
-				var msg =
-					"The CORS policy for this site does not " +
-					"allow access from the specified Origin."
-				return callback(new Error(msg), false)
-			}
-			return callback(null, true)
-		},
-		credentials: true,
-	})
-)
+app.use(cors())
 
 const secretKey = crypto.randomBytes(32).toString("hex")
 const MongoDBSession = MongoDBStore(session)

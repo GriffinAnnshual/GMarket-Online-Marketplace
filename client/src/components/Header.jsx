@@ -9,9 +9,10 @@ import {toast} from 'react-toastify'
 import {useSelector, useDispatch} from 'react-redux'
 import { logout } from "../store/modules/auth/actions"
 import plus from '../assets/images/plus.png'
+import Cookies from "universal-cookie"
 
 const  Header = () => {
-
+	const cookie = new Cookies()
 	const dispatch = useDispatch()
 	const isAuthenticated = useSelector((state)=> state.auth.isAuthenticated)
 	const totalQuantity = useSelector((state)=> state.cart.totalQuantity)
@@ -28,6 +29,8 @@ const  Header = () => {
 					},
 				}
 			).then(()=>{
+				cookie.remove("gmarket_user_token")
+				cookie.remove("loginType")
 				dispatch(logout())
 				toast.info("Logged out!")
 				setInterval(()=>{window.location.reload()},1000)
@@ -109,7 +112,7 @@ const  Header = () => {
 													{(user.picture || user.userName) ? (
 														
 															<img
-																className="md:w-max"
+																className="md:w-[50px]"
 																src={user.picture}
 																alt="profile_picture"></img>
 														
