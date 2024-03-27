@@ -108,6 +108,7 @@ const isAuthenticated = async (req, res, next) => {
 	}
 	else {
 		res.status(401).json({ exists: false, message: "Unauthorized" })
+		res.redirect("http://localhost:5173/")
 	}
 }
 

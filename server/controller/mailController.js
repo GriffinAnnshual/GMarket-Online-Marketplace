@@ -9,7 +9,7 @@ import {connectRedis} from '../data/redis.js'
 import User from '../Modals/userSchema.js'
 
 
-const Redisclient = await connectRedis()
+const Redisclient = connectRedis()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)

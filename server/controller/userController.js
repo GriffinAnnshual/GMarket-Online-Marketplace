@@ -1,9 +1,9 @@
 import User from "../Modals/userSchema.js"
 import jwt from "jsonwebtoken"
-import bcrypt from "bcryptjs"
+import bcrypt from "bcryptjs"	
 import { store } from "../app.js"
-
-
+import cloudinary from 'cloudinary'
+import { RootNodesUnavailableError } from "redis"
 
 export const loginUser = async (req, res) => {
 	try {
@@ -115,7 +115,6 @@ export const getDetails = async(req, res) => {
 	try{
 		const user_id = req.params.user_id
 		const userDetails = await User.find({_id: user_id })
-		console.log(userDetails)
 		res.status(200).json({'status': 'ok', 'userDetails': userDetails[0]})
 	}catch(err){
 		console.log("Error occurred:", err)
@@ -149,9 +148,51 @@ export const updateDetails =  async(req,res) =>{
 
 }
 
-export const uploadAvatar = (req, res) => {
 
+export const uploadAvatar = async (req, res) => {
+	try {
+		const user_id = req.params.user_id
+		const arrayBuffer = req.file.buffer
+
+		// Upload image to Cloudinary
+		const uploadResult = await new Promise((resolve, reject) => {
+			cloudinary.v2.uploader
+				.upload_stream((error, result) => {
+					if (error) {
+						reject(error)
+					} else {
+						resolve(result)
+					}
+				})
+				.end(arrayBuffer)
+		})
+
+		// Update user profile with Cloudinary URL
+		await User.updateOne(
+			{ _id: user_id },
+			{ profilePic: uploadResult.secure_url }
+		)
+
+		return res
+			.status(200)
+			.json({
+				status: true,
+				message: "Avatar updated successfully",
+				image_url: uploadResult.secure_url,
+			})
+	} catch (error) {
+		console.error("Error uploading avatar:", error)
+		return res.status(400).json({ status: false, message: error.message })
+	}
 }
 
 
-export const addAddress =  (req, res) => {}
+export const removeAvatar = async(req,res) =>{
+	try{
+		const user_id = req.params.user_id
+		await User.updateOne({_id:user_id},{profilePic: null})
+		res.status(200).json({success:true, message: 'Avatar removed successfully'})
+	}catch(err){
+		res.status(400).json({success:false, message: err.message})
+	}
+}
